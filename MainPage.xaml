@@ -7,7 +7,62 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" MinHeight="800" MinWidth="1280">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="296"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
 
+        <!--Left list -->
+        <Rectangle Grid.Column="0" Fill="#FFE6E6E6" />
+        <CommandBar x:Name="CommandBarLeft" Grid.Column="0">
+            <CommandBar.Content>
+                <TextBlock Text="Raspberry List" Margin="12,14"/>
+            </CommandBar.Content>
+            <AppBarButton Icon="Add" Label="Add Device"/>
+            <AppBarButton Icon="Refresh" Label="Refresh Devices"/>
+        </CommandBar>
+        <!--<TextBlock Grid.Column="0" Text="Raspberry List" FontSize="24" Margin="10,10,10,10" Height="32" VerticalAlignment="Top"/>-->
+        <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:Device">
+                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="48"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <Image Grid.RowSpan="2" Grid.Column="0" Source="Assets/raspberry-36.png" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="None"/>
+                        <TextBlock Text="{x:Bind Name}" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" FontSize="20"/>
+                        <TextBlock Text="{x:Bind Location}" Grid.Column="1" Grid.Row="1" FontSize="11" />
+                        <TextBlock Text="{x:Bind IpAddress}" Grid.Column="2" Grid.Row="1" FontSize="11" HorizontalAlignment="Right"/>
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="5,10"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <x:String>Item 1</x:String>
+        </ListView>
+
+        <!--Main Page -->
+        <Rectangle Grid.Column="1" />
+        <CommandBar x:Name="CommandBarMain" Grid.Column="1">
+            <CommandBar.Content>
+                <TextBlock Text="Schedule Overview" Margin="12,14"/>
+            </CommandBar.Content>
+            <AppBarButton Icon="Add" Label="Add Asset"/>
+            <AppBarButton Icon="Refresh" Label="Refresh Assets"/>
+        </CommandBar>
+        
     </Grid>
 </Page>
