@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -20,6 +21,7 @@ namespace ScreenlyManager
         private const string DB_FILE = "db.json";
 
         private List<Device> Devices;
+        private Device CurrentDevice;
 
         public MainPage()
         {
@@ -36,10 +38,6 @@ namespace ScreenlyManager
 
             this.InitializeComponent();
 
-            List<Asset> assets = new List<Asset>();
-            foreach (var device in Devices)
-                assets.AddRange(Task.Run(() => this.GetAssetsAsync(device)).Result);
-
             this.ListViewDevice.ItemsSource = this.Devices;
         }
 
@@ -50,68 +48,42 @@ namespace ScreenlyManager
             this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
         }
 
-        //public Asset GetAsset(Device d, string assetId)
-        //{
-        //    Asset returnedAsset = new Asset();
-        //    JsonSerializerSettings settings = new JsonSerializerSettings();
-        //    IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
-        //    {
-        //        DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
-        //    };
-        //    settings.Converters.Add(dateConverter);
+        private void ListViewDeviceItemClick(object sender, ItemClickEventArgs e)
+        {
+            var deviceCliked = (Device)e.ClickedItem;
+            this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
 
-        //    string resultJson = string.Empty;
-        //    string parameters = "/api/assets/" + assetId;
+            List<Asset> assets = new List<Asset>();
+            assets.AddRange(Task.Run(() => this.GetAssetsAsync(deviceCliked)).Result);
 
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-        //        request.Method = "GET";
-        //        using (HttpWebResponse response = (HttpWebResponse)request.())
-        //        {
-        //            Stream dataStream = response.GetResponseStream();
-        //            StreamReader reader = new StreamReader(dataStream);
-        //            resultJson = reader.ReadToEnd();
-        //            reader.Close();
-        //            dataStream.Close();
-        //        }
+            this.ListViewActiveAssets.ItemsSource = assets.FindAll(x => x.IsActive);
+            this.ListViewInactiveAssets.ItemsSource = assets.FindAll(x => !x.IsActive);
+            this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
+            this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
 
-        //        if (!resultJson.Equals(string.Empty))
-        //            returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(string.Format("Error while getting asset {0}", assetId), ex);
-        //    }
+            this.CurrentDevice = deviceCliked;
+        }
 
-        //    return returnedAsset;
-        //}
+        private async void ButtonPreviewClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (Uri.TryCreate((((Button)sender).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
+                await Windows.System.Launcher.LaunchUriAsync(uriResult);
+        }
 
-        //public bool RemoveAsset(Device d, string assetId)
-        //{
-        //    string resultJson = string.Empty;
-        //    string parameters = "/api/assets/" + assetId;
+        private async void ButtonRemoveClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var dialog = new MessageDialog("Are you sure to delete this item?", "Delete");
+            dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
+            dialog.Commands.Add(new UICommand("No") { Id = 1 });
+            dialog.DefaultCommandIndex = 0;
+            dialog.CancelCommandIndex = 1;
+            var result = await dialog.ShowAsync();
+            var assetId = ((Button)sender).Tag.ToString();
+            if((int)result.Id == 0)
+                await Task.Run(() => this.RemoveAsset(this.CurrentDevice, assetId));
 
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-        //        request.Method = "DELETE";
-        //        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-        //        {
-        //            Stream dataStream = response.GetResponseStream();
-        //            StreamReader reader = new StreamReader(dataStream);
-        //            resultJson = reader.ReadToEnd();
-        //            reader.Close();
-        //            dataStream.Close();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error when asset deleting.", ex);
-        //    }
-
-        //    return true;
-        //}
+            // TODO : refresh assets
+        }
 
         public async Task<List<Asset>> GetAssetsAsync(Device d)
         {
@@ -123,7 +95,7 @@ namespace ScreenlyManager
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
                 request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse) await request.GetResponseAsync())
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
                 {
                     Stream dataStream = response.GetResponseStream();
                     StreamReader reader = new StreamReader(dataStream);
@@ -139,6 +111,30 @@ namespace ScreenlyManager
             }
 
             return returnedAssets;
+        }
+
+        public async Task<bool> RemoveAsset(Device d, string assetId)
+        {
+            string resultJson = string.Empty;
+            string parameters = "/api/assets/" + assetId;
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
+                request.Method = "DELETE";
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                {
+                    Stream dataStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    resultJson = reader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error when asset deleting.", ex);
+            }
+
+            return true;
         }
 
         //public Asset CreateAsset(Device d, Asset a)
@@ -184,6 +180,43 @@ namespace ScreenlyManager
         //    {
         //        throw new Exception("Error while creating asset.", ex);
         //    }
+        //    return returnedAsset;
+        //}
+
+        //public Asset GetAsset(Device d, string assetId)
+        //{
+        //    Asset returnedAsset = new Asset();
+        //    JsonSerializerSettings settings = new JsonSerializerSettings();
+        //    IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
+        //    {
+        //        DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
+        //    };
+        //    settings.Converters.Add(dateConverter);
+
+        //    string resultJson = string.Empty;
+        //    string parameters = "/api/assets/" + assetId;
+
+        //    try
+        //    {
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
+        //        request.Method = "GET";
+        //        using (HttpWebResponse response = (HttpWebResponse)request.())
+        //        {
+        //            Stream dataStream = response.GetResponseStream();
+        //            StreamReader reader = new StreamReader(dataStream);
+        //            resultJson = reader.ReadToEnd();
+        //            reader.Close();
+        //            dataStream.Close();
+        //        }
+
+        //        if (!resultJson.Equals(string.Empty))
+        //            returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception(string.Format("Error while getting asset {0}", assetId), ex);
+        //    }
+
         //    return returnedAsset;
         //}
     }

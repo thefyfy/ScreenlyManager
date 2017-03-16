@@ -7,13 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" MinHeight="800" MinWidth="1280">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="296"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <!--Left list -->
+        <!-- Left list -->
         <Rectangle Grid.Column="0" Fill="#FFE6E6E6" />
         <CommandBar x:Name="CommandBarLeft" Grid.Column="0">
             <CommandBar.Content>
@@ -22,8 +22,7 @@
             <AppBarButton Icon="Add" Label="Add Device"/>
             <AppBarButton Icon="Refresh" Label="Refresh Devices"/>
         </CommandBar>
-        <!--<TextBlock Grid.Column="0" Text="Raspberry List" FontSize="24" Margin="10,10,10,10" Height="32" VerticalAlignment="Top"/>-->
-        <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276">
+        <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,10" ItemClick="ListViewDeviceItemClick" IsItemClickEnabled="True" IsMultiSelectCheckBoxEnabled="False">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:Device">
                     <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -36,7 +35,7 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        
+
                         <Image Grid.RowSpan="2" Grid.Column="0" Source="Assets/raspberry-36.png" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="None"/>
                         <TextBlock Text="{x:Bind Name}" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" FontSize="20"/>
                         <TextBlock Text="{x:Bind Location}" Grid.Column="1" Grid.Row="1" FontSize="11" />
@@ -51,18 +50,98 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
-            <x:String>Item 1</x:String>
         </ListView>
 
-        <!--Main Page -->
+        <!-- Main Page -->
         <Rectangle Grid.Column="1" />
         <CommandBar x:Name="CommandBarMain" Grid.Column="1">
             <CommandBar.Content>
-                <TextBlock Text="Schedule Overview" Margin="12,14"/>
+                <TextBlock x:Name="TextBlockCommandBarMain" Text="Schedule Overview" Margin="12,14"/>
             </CommandBar.Content>
-            <AppBarButton Icon="Add" Label="Add Asset"/>
-            <AppBarButton Icon="Refresh" Label="Refresh Assets"/>
+            <AppBarButton x:Name="AppBarButtonMainAdd" Icon="Add" Label="Add Asset"/>
+            <AppBarButton x:Name="AppBarButtonMainRefresh" Icon="Refresh" Label="Refresh Assets"/>
         </CommandBar>
-        
+        <ScrollViewer Grid.Column="1" Margin="10,50,10,10" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Border Background="#FFBC1142">
+                    <TextBlock x:Name="TextBlockActiveAsset" Text="Active assets" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
+                </Border>
+                <!-- Active Assets -->
+                <ListView x:Name="ListViewActiveAssets" Margin="10,10,10,10" IsMultiSelectCheckBoxEnabled="False" CanReorderItems="True" AllowDrop="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Asset">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="72" />
+                                    <ColumnDefinition Width="72" />
+                                    <ColumnDefinition Width="72" />
+                                    <ColumnDefinition Width="108" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="&#xE700;" FontFamily="Segoe MDL2 Assets" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind Name}" Grid.Column="2" FontSize="18" VerticalAlignment="Center" Padding="0,0,5,0"/>
+                                <TextBlock Text="{x:Bind StartDate}" Grid.Column="3" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
+                                <TextBlock Text="{x:Bind EndDate}" Grid.Column="4" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
+                                <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreviewClick" Tag="{x:Bind Uri}"/>
+                                <Button x:Name="ButtonChange" Content="&#xE1C2;" FontFamily="Segoe MDL2 Assets" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36"/>
+                                <Button x:Name="ButtonRemove" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonRemoveClick" Tag="{x:Bind AssetId}"/>
+                                <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="5,10"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+
+                <Border Background="#FFBC1142">
+                    <TextBlock x:Name="TextBlockInactiveAsset" Text="Inactive assets" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
+                </Border>
+                <!-- Inactive Assets -->
+                <ListView x:Name="ListViewInactiveAssets" Margin="10,10,10,10" IsMultiSelectCheckBoxEnabled="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Asset">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition Width="36" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="72" />
+                                    <ColumnDefinition Width="72" />
+                                    <ColumnDefinition Width="72" />
+                                    <ColumnDefinition Width="108" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{x:Bind Name}" Grid.Column="2" FontSize="18" VerticalAlignment="Center" Padding="0,0,5,0"/>
+                                <TextBlock Text="{x:Bind StartDate}" Grid.Column="3" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
+                                <TextBlock Text="{x:Bind EndDate}" Grid.Column="4" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
+                                <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreviewClick" Tag="{x:Bind Uri}"/>
+                                <Button x:Name="ButtonChange" Content="&#xE1C2;" FontFamily="Segoe MDL2 Assets" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36"/>
+                                <Button x:Name="ButtonRemove" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonRemoveClick" Tag="{x:Bind AssetId}"/>
+                                <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="5,10"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -40,5 +40,13 @@ namespace ScreenlyManager
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "start_date")]
         public DateTime StartDate { get; set; }
+
+        public bool IsEnabledSwitch
+        {
+            get
+            {
+                return IsEnabled.Equals(1) ? true : false;
+            }
+        }
     }
 }
