@@ -20,7 +20,7 @@
                 <TextBlock Text="Raspberry List" Margin="12,14"/>
             </CommandBar.Content>
             <AppBarButton Icon="Add" Label="Add Device"/>
-            <AppBarButton Icon="Refresh" Label="Refresh Devices"/>
+            <AppBarButton x:Name="AppBarButtonRefreshDevice" Icon="Refresh" Label="Refresh Devices" Click="AppBarButtonRefreshDeviceClick"/>
         </CommandBar>
         <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,10" ItemClick="ListViewDeviceItemClick" IsItemClickEnabled="True" IsMultiSelectCheckBoxEnabled="False">
             <ListView.ItemTemplate>
@@ -58,8 +58,8 @@
             <CommandBar.Content>
                 <TextBlock x:Name="TextBlockCommandBarMain" Text="Schedule Overview" Margin="12,14"/>
             </CommandBar.Content>
-            <AppBarButton x:Name="AppBarButtonMainAdd" Icon="Add" Label="Add Asset"/>
-            <AppBarButton x:Name="AppBarButtonMainRefresh" Icon="Refresh" Label="Refresh Assets"/>
+            <AppBarButton x:Name="AppBarButtonAddAsset" Icon="Add" Label="Add Asset"/>
+            <AppBarButton x:Name="AppBarButtonRefreshAssets" Icon="Refresh" Label="Refresh Assets" Click="AppBarButtonRefreshAssetsClick"/>
         </CommandBar>
         <ScrollViewer Grid.Column="1" Margin="10,50,10,10" VerticalScrollBarVisibility="Auto">
             <StackPanel>

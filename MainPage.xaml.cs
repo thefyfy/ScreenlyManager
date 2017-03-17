@@ -22,9 +22,11 @@ namespace ScreenlyManager
 
         private List<Device> Devices;
         private Device CurrentDevice;
+        private string PathDbFile;
 
         public MainPage()
         {
+            this.InitializeComponent();
 
             // AppData folder access
             var localFolder = ApplicationData.Current.LocalFolder;
@@ -33,35 +35,72 @@ namespace ScreenlyManager
             if (!File.Exists(localFolder.Path + Path.DirectorySeparatorChar + DB_FILE))
                 File.Create(localFolder.Path + Path.DirectorySeparatorChar + DB_FILE);
             else
-                this.LoadConfigurationAsync(localFolder.Path + Path.DirectorySeparatorChar + DB_FILE);
-                
-
-            this.InitializeComponent();
-
-            this.ListViewDevice.ItemsSource = this.Devices;
+            {
+                this.PathDbFile = localFolder.Path + Path.DirectorySeparatorChar + DB_FILE;
+                this.LoadConfigurationAsync(this.PathDbFile);
+            }
         }
 
+        /// <summary>
+        /// Load devices from JSON file and refresh list in ListView
+        /// </summary>
+        /// <param name="path">Path to "db.json" file (default storage : appdata/local)</param>
         public async void LoadConfigurationAsync(string path)
         {
             StorageFile file = await StorageFile.GetFileFromPathAsync(path);
             string json = await FileIO.ReadTextAsync(file);
             this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
+            this.ListViewDevice.ItemsSource = this.Devices;
         }
 
-        private void ListViewDeviceItemClick(object sender, ItemClickEventArgs e)
+        /// <summary>
+        /// Load assets for device in param trought and refresh view
+        /// </summary>
+        /// <param name="d">Selected device</param>
+        private void LoadAssetsForDevice(Device d)
         {
-            var deviceCliked = (Device)e.ClickedItem;
-            this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
-
             List<Asset> assets = new List<Asset>();
-            assets.AddRange(Task.Run(() => this.GetAssetsAsync(deviceCliked)).Result);
+            assets.AddRange(Task.Run(() => this.GetAssetsAsync(d)).Result);
 
             this.ListViewActiveAssets.ItemsSource = assets.FindAll(x => x.IsActive);
             this.ListViewInactiveAssets.ItemsSource = assets.FindAll(x => !x.IsActive);
             this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
+        }
 
+        /// <summary>
+        /// Refresh button click in left command bar. Used to refresh devices list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AppBarButtonRefreshDeviceClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            this.LoadConfigurationAsync(this.PathDbFile);
+        }
+        
+        /// <summary>
+        /// Refresh button click in main command bar. Used to refresh assets for current device.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AppBarButtonRefreshAssetsClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (this.CurrentDevice != null)
+                this.LoadAssetsForDevice(this.CurrentDevice);
+        }
+
+        /// <summary>
+        /// Event for selection in device list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListViewDeviceItemClick(object sender, ItemClickEventArgs e)
+        {
+            var deviceCliked = (Device)e.ClickedItem;
+            this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
             this.CurrentDevice = deviceCliked;
+
+            this.LoadAssetsForDevice(this.CurrentDevice);
         }
 
         private async void ButtonPreviewClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -70,6 +109,11 @@ namespace ScreenlyManager
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
         }
 
+        /// <summary>
+        /// Event to remove an asset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void ButtonRemoveClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var dialog = new MessageDialog("Are you sure to delete this item?", "Delete");
@@ -82,9 +126,14 @@ namespace ScreenlyManager
             if((int)result.Id == 0)
                 await Task.Run(() => this.RemoveAsset(this.CurrentDevice, assetId));
 
-            // TODO : refresh assets
+            this.LoadAssetsForDevice(this.CurrentDevice);
         }
 
+        /// <summary>
+        /// Get assets trought Screenly API
+        /// </summary>
+        /// <param name="d">Selected device</param>
+        /// <returns>List of assets</returns>
         public async Task<List<Asset>> GetAssetsAsync(Device d)
         {
             List<Asset> returnedAssets = new List<Asset>();
@@ -113,6 +162,12 @@ namespace ScreenlyManager
             return returnedAssets;
         }
 
+        /// <summary>
+        /// Remove specific asset for selected device
+        /// </summary>
+        /// <param name="d">Selected device</param>
+        /// <param name="assetId">Asset ID</param>
+        /// <returns>Boolean for result of execution</returns>
         public async Task<bool> RemoveAsset(Device d, string assetId)
         {
             string resultJson = string.Empty;
