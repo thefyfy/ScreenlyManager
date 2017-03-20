@@ -226,7 +226,7 @@ namespace ScreenlyManager
 
             string json = JsonConvert.SerializeObject(a, settings);
             var postData = "model=" + json;
-            var data = System.Text.Encoding.ASCII.GetBytes(postData);
+            var data = System.Text.Encoding.UTF8.GetBytes(postData);
 
             string resultJson = string.Empty;
             string parameters = "/api/assets/" + a.AssetId;
@@ -276,7 +276,7 @@ namespace ScreenlyManager
 
         //    string json = JsonConvert.SerializeObject(a, settings);
         //    var postData = "model=" + json;
-        //    var data = Encoding.ASCII.GetBytes(postData);
+        //    var data = Encoding.UTF8.GetBytes(postData);
 
         //    string resultJson = string.Empty;
         //    string parameters = "/api/assets";
