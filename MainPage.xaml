@@ -84,13 +84,14 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="&#xE700;" FontFamily="Segoe MDL2 Assets" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{x:Bind AssetType}" FontFamily="Segoe MDL2 Assets" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Bind Name}" Grid.Column="2" FontSize="18" VerticalAlignment="Center" Padding="0,0,5,0"/>
                                 <TextBlock Text="{x:Bind StartDate}" Grid.Column="3" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
                                 <TextBlock Text="{x:Bind EndDate}" Grid.Column="4" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
-                                <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreviewClick" Tag="{x:Bind Uri}"/>
+                                <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreviewClick" Tag="{x:Bind ReadableUri}"/>
                                 <Button x:Name="ButtonChange" Content="&#xE1C2;" FontFamily="Segoe MDL2 Assets" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36"/>
                                 <Button x:Name="ButtonRemove" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonRemoveClick" Tag="{x:Bind AssetId}"/>
-                                <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0"/>
+                                <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0" Toggled="ToggleSwitchEnableToggled"/>
 
                             </Grid>
                         </DataTemplate>
@@ -123,13 +124,14 @@
                                     <ColumnDefinition Width="108" />
                                 </Grid.ColumnDefinitions>
 
+                                <TextBlock Text="{x:Bind AssetType}" FontFamily="Segoe MDL2 Assets" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 <TextBlock Text="{x:Bind Name}" Grid.Column="2" FontSize="18" VerticalAlignment="Center" Padding="0,0,5,0"/>
                                 <TextBlock Text="{x:Bind StartDate}" Grid.Column="3" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
                                 <TextBlock Text="{x:Bind EndDate}" Grid.Column="4" FontSize="16" VerticalAlignment="Center" Padding="0,0,5,0"/>
-                                <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreviewClick" Tag="{x:Bind Uri}"/>
+                                <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreviewClick" Tag="{x:Bind ReadableUri}"/>
                                 <Button x:Name="ButtonChange" Content="&#xE1C2;" FontFamily="Segoe MDL2 Assets" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36"/>
                                 <Button x:Name="ButtonRemove" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonRemoveClick" Tag="{x:Bind AssetId}"/>
-                                <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0"/>
+                                <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0" Toggled="ToggleSwitchEnableToggled"/>
 
                             </Grid>
                         </DataTemplate>

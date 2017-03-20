@@ -68,6 +68,8 @@ namespace ScreenlyManager
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
         }
 
+        #region View's events
+
         /// <summary>
         /// Refresh button click in left command bar. Used to refresh devices list.
         /// </summary>
@@ -103,10 +105,26 @@ namespace ScreenlyManager
             this.LoadAssetsForDevice(this.CurrentDevice);
         }
 
+        /// <summary>
+        /// Open asset link with default browser if it'a a web link
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void ButtonPreviewClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (Uri.TryCreate((((Button)sender).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
+        }
+        
+        private async void ToggleSwitchEnableToggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            Asset currentAsset = ((ToggleSwitch)sender).DataContext as Asset;
+            if (currentAsset != null)
+            {
+                currentAsset.IsEnabled = ((ToggleSwitch)sender).IsOn ? "1" : "0";
+                await this.UpdateAssetAsync(this.CurrentDevice, currentAsset);
+                this.LoadAssetsForDevice(this.CurrentDevice);
+            }
         }
 
         /// <summary>
@@ -124,10 +142,14 @@ namespace ScreenlyManager
             var result = await dialog.ShowAsync();
             var assetId = ((Button)sender).Tag.ToString();
             if((int)result.Id == 0)
-                await Task.Run(() => this.RemoveAsset(this.CurrentDevice, assetId));
+                await Task.Run(() => this.RemoveAssetAsync(this.CurrentDevice, assetId));
 
             this.LoadAssetsForDevice(this.CurrentDevice);
         }
+
+        #endregion
+
+        #region Screenly API methods
 
         /// <summary>
         /// Get assets trought Screenly API
@@ -156,7 +178,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while getWting assets.", ex);
+                throw new Exception("Error while getting assets.", ex);
             }
 
             return returnedAssets;
@@ -168,7 +190,7 @@ namespace ScreenlyManager
         /// <param name="d">Selected device</param>
         /// <param name="assetId">Asset ID</param>
         /// <returns>Boolean for result of execution</returns>
-        public async Task<bool> RemoveAsset(Device d, string assetId)
+        public async Task<bool> RemoveAssetAsync(Device d, string assetId)
         {
             string resultJson = string.Empty;
             string parameters = "/api/assets/" + assetId;
@@ -190,6 +212,56 @@ namespace ScreenlyManager
             }
 
             return true;
+        }
+
+        public async Task<Asset> UpdateAssetAsync(Device d, Asset a)
+        {
+            Asset returnedAsset = new Asset();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
+            {
+                DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
+            };
+            settings.Converters.Add(dateConverter);
+
+            string json = JsonConvert.SerializeObject(a, settings);
+            var postData = "model=" + json;
+            var data = System.Text.Encoding.ASCII.GetBytes(postData);
+
+            string resultJson = string.Empty;
+            string parameters = "/api/assets/" + a.AssetId;
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                Stream dataStream = await request.GetRequestStreamAsync();
+                dataStream.Write(data, 0, data.Length);
+
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    resultJson = reader.ReadToEnd();
+                }
+
+                if (!resultJson.Equals(string.Empty))
+                    returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
+            }
+            catch (WebException ex)
+            {
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    throw new Exception(reader.ReadToEnd(), ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while updating asset.", ex);
+            }
+
+            return returnedAsset;
         }
 
         //public Asset CreateAsset(Device d, Asset a)
@@ -274,5 +346,7 @@ namespace ScreenlyManager
 
         //    return returnedAsset;
         //}
+
+        #endregion
     }
 }

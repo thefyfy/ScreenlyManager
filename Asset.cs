@@ -14,6 +14,21 @@ namespace ScreenlyManager
         [Newtonsoft.Json.JsonProperty(PropertyName = "mimetype")]
         public string Mimetype { get; set; }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public string AssetType
+        {
+            get
+            {
+                switch (this.Mimetype)
+                {
+                    case "video": return "\uE116";
+                    case "image": return "\uEB9F";
+                    case "webpage": return "\uE128";
+                    default: return "\uEB90";
+                }
+            }
+        }
+
         [Newtonsoft.Json.JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
@@ -21,16 +36,40 @@ namespace ScreenlyManager
         public DateTime EndDate { get; set; }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "is_enabled")]
-        public Int32 IsEnabled { get; set; }
+        public string IsEnabled { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public bool IsEnabledSwitch
+        {
+            get
+            {
+                return IsEnabled.Equals("1") ? true : false;
+            }
+        }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "nocache")]
-        public Int32 NoCache { get; set; }
+        public string NoCache { get; set; }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "is_active")]
         public Boolean IsActive { get; set; }
 
+        private string _Uri;
+
         [Newtonsoft.Json.JsonProperty(PropertyName = "uri")]
-        public string Uri { get; set; }
+        public string Uri
+        {
+            get { return _Uri; }
+            set { _Uri = System.Net.WebUtility.UrlEncode(value); }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public string ReadableUri
+        {
+            get
+            {
+                return System.Net.WebUtility.UrlDecode(this.Uri);
+            }
+        }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "duration")]
         public string Duration { get; set; }
@@ -40,13 +79,5 @@ namespace ScreenlyManager
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "start_date")]
         public DateTime StartDate { get; set; }
-
-        public bool IsEnabledSwitch
-        {
-            get
-            {
-                return IsEnabled.Equals(1) ? true : false;
-            }
-        }
     }
 }
