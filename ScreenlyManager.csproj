@@ -107,6 +107,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="README.md" />
     <None Include="ScreenlyManager_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

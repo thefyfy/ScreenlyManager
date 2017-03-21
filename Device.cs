@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,7 +12,25 @@ namespace ScreenlyManager
     public class Device
     {
         [Newtonsoft.Json.JsonIgnore]
-        public List<Asset> Assets;
+        private List<Asset> Assets;
+
+        [Newtonsoft.Json.JsonIgnore]
+        public ObservableCollection<Asset> ActiveAssets
+        {
+            get
+            {
+                return new ObservableCollection<Asset>(this.Assets.FindAll(x => x.IsActive));
+            }
+        }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public ObservableCollection<Asset> InactiveAssets
+        {
+            get
+            {
+                return new ObservableCollection<Asset>(this.Assets.FindAll(x => !x.IsActive));
+            }
+        }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "name")]
         public string Name { get; set; }

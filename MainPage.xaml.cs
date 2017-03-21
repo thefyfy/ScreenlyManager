@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
@@ -62,8 +63,8 @@ namespace ScreenlyManager
         {
             await this.CurrentDevice.GetAssetsAsync();
 
-            this.ListViewActiveAssets.ItemsSource = this.CurrentDevice.Assets.FindAll(x => x.IsActive);
-            this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.Assets.FindAll(x => !x.IsActive);
+            this.ListViewActiveAssets.ItemsSource = this.CurrentDevice.ActiveAssets;
+            this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.InactiveAssets;
             this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
         }

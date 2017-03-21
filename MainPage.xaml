@@ -69,7 +69,7 @@
                     <TextBlock x:Name="TextBlockActiveAsset" Text="Active assets" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
                 </Border>
                 <!-- Active Assets -->
-                <ListView x:Name="ListViewActiveAssets" Margin="10,10,10,10" IsMultiSelectCheckBoxEnabled="False" CanReorderItems="True" AllowDrop="True">
+                <ListView x:Name="ListViewActiveAssets" Margin="10,10,10,10" CanReorderItems="True" AllowDrop="True" CanDragItems="True">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Asset">
                             <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
