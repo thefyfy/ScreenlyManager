@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Popups;
@@ -78,7 +75,7 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AppBarButtonRefreshDeviceClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void AppBarButtonRefreshDevice_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             this.LoadConfigurationAsync(this.PathDbFile);
         }
@@ -88,7 +85,7 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AppBarButtonRefreshAssetsClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void AppBarButtonRefreshAssets_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (this.CurrentDevice != null)
                 this.RefreshAssetsForCurrentDeviceAsync();
@@ -99,7 +96,7 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ListViewDeviceItemClick(object sender, ItemClickEventArgs e)
+        private void ListViewDeviceItem_Click(object sender, ItemClickEventArgs e)
         {
             var deviceCliked = (Device)e.ClickedItem;
             this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
@@ -109,11 +106,11 @@ namespace ScreenlyManager
         }
 
         /// <summary>
-        /// Open asset link with default browser if it'a a web link
+        /// Open asset link with default browser if it's a web link
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ButtonPreviewClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonPreview_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (Uri.TryCreate((((Button)sender).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
@@ -124,7 +121,7 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ToggleSwitchEnableToggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ToggleSwitchEnable_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             Asset currentAsset = ((ToggleSwitch)sender).DataContext as Asset;
             if (currentAsset != null)
@@ -140,7 +137,7 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ButtonRemoveClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonRemove_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             var dialog = new MessageDialog("Are you sure to delete this item?", "Delete");
             dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
@@ -153,6 +150,78 @@ namespace ScreenlyManager
                 await Task.Run(() => this.CurrentDevice.RemoveAssetAsync(assetId));
 
             this.RefreshAssetsForCurrentDeviceAsync();
+        }
+
+        /// <summary>
+        /// Export devices list to JSON file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void AppBarButtonExportConf_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var dbContent = JsonConvert.SerializeObject(this.Devices);
+
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+            savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Downloads;
+            savePicker.FileTypeChoices.Add("JSON", new List<string>() { ".json" });
+            savePicker.SuggestedFileName = "db";
+
+            StorageFile file = await savePicker.PickSaveFileAsync();
+            if (file != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+                await FileIO.WriteTextAsync(file, dbContent);
+                Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                var dialog = new MessageDialog($"Configuration exported to {file.Name}", "Backup created");
+                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                {
+                    dialog.Content = $"File {file.Name} couldn't be saved.";
+                    dialog.Title = "Error";
+                }
+                dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
+                dialog.DefaultCommandIndex = 0;
+                var result = await dialog.ShowAsync();
+            }
+        }
+
+        /// <summary>
+        /// Import devices from JSON file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void AppBarButtonImportConf_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
+            openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Downloads;
+            openPicker.FileTypeFilter.Add(".json");
+
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+                string content = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+
+                try
+                {
+                    this.Devices = JsonConvert.DeserializeObject<List<Device>>(content);
+                    StorageFile dbFile = await StorageFile.GetFileFromPathAsync(this.PathDbFile);
+                    await FileIO.WriteTextAsync(dbFile, content);
+
+                    this.LoadConfigurationAsync(this.PathDbFile);
+
+                    var dialog = new MessageDialog($"Configuration imported from {file.Name}", "Import completed");
+                    dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
+                    dialog.DefaultCommandIndex = 0;
+                    var result = await dialog.ShowAsync();
+                }
+                catch(Exception ex)
+                {
+                    var dialogError = new MessageDialog($"Oops... {file.Name} is an invalid file. We cannot grab \"Devices\" in this file. See error description below : { Environment.NewLine + ex.Message }");
+                    dialogError.Commands.Add(new UICommand("Ok") { Id = 0 });
+                    dialogError.DefaultCommandIndex = 0;
+                    await dialogError.ShowAsync();
+                }
+            }
         }
 
         #endregion
