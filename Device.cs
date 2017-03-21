@@ -138,7 +138,11 @@ namespace ScreenlyManager
                 }
 
                 if (!resultJson.Equals(string.Empty))
+                {
                     returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
+                    //var assetInList = this.Assets.Find(x => x.AssetId.Equals(returnedAsset.AssetId));
+                    //assetInList = returnedAsset;
+                }
             }
             catch (WebException ex)
             {

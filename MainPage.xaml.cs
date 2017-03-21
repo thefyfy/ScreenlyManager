@@ -59,7 +59,7 @@ namespace ScreenlyManager
         }
 
         /// <summary>
-        /// Load assets for device in param trought and refresh view
+        /// Load assets for current device trought API and refresh assets view
         /// </summary>
         private async void RefreshAssetsForCurrentDeviceAsync()
         {
@@ -119,6 +119,11 @@ namespace ScreenlyManager
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
         }
         
+        /// <summary>
+        /// Enable/disable an asset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void ToggleSwitchEnableToggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             Asset currentAsset = ((ToggleSwitch)sender).DataContext as Asset;
