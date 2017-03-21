@@ -5,4 +5,4 @@ Screenly provides web interface that can easily manage current device. If you ha
 
 This app allows you to groups all your devices in unique interface to manage them more easily.
 
-![Screenly OSE](./Assets/ScreenCapture.png)
+![screencapture](https://cloud.githubusercontent.com/assets/1229018/24158601/0eae038c-0e5d-11e7-81c3-bd16bfeeacee.png)
