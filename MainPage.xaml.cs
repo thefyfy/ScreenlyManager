@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Popups;
@@ -50,20 +51,22 @@ namespace ScreenlyManager
             StorageFile file = await StorageFile.GetFileFromPathAsync(path);
             string json = await FileIO.ReadTextAsync(file);
             this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
+            // Need to get list of assets for each device
+            foreach (var device in this.Devices)
+                await device.GetAssetsAsync();
+
             this.ListViewDevice.ItemsSource = this.Devices;
         }
 
         /// <summary>
         /// Load assets for device in param trought and refresh view
         /// </summary>
-        /// <param name="d">Selected device</param>
-        private void LoadAssetsForDevice(Device d)
+        private async void RefreshAssetsForCurrentDeviceAsync()
         {
-            List<Asset> assets = new List<Asset>();
-            assets.AddRange(Task.Run(() => this.GetAssetsAsync(d)).Result);
+            await this.CurrentDevice.GetAssetsAsync();
 
-            this.ListViewActiveAssets.ItemsSource = assets.FindAll(x => x.IsActive);
-            this.ListViewInactiveAssets.ItemsSource = assets.FindAll(x => !x.IsActive);
+            this.ListViewActiveAssets.ItemsSource = this.CurrentDevice.Assets.FindAll(x => x.IsActive);
+            this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.Assets.FindAll(x => !x.IsActive);
             this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
         }
@@ -88,7 +91,7 @@ namespace ScreenlyManager
         private void AppBarButtonRefreshAssetsClick(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (this.CurrentDevice != null)
-                this.LoadAssetsForDevice(this.CurrentDevice);
+                this.RefreshAssetsForCurrentDeviceAsync();
         }
 
         /// <summary>
@@ -102,7 +105,7 @@ namespace ScreenlyManager
             this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
             this.CurrentDevice = deviceCliked;
 
-            this.LoadAssetsForDevice(this.CurrentDevice);
+            this.RefreshAssetsForCurrentDeviceAsync();
         }
 
         /// <summary>
@@ -122,8 +125,8 @@ namespace ScreenlyManager
             if (currentAsset != null)
             {
                 currentAsset.IsEnabled = ((ToggleSwitch)sender).IsOn ? "1" : "0";
-                await this.UpdateAssetAsync(this.CurrentDevice, currentAsset);
-                this.LoadAssetsForDevice(this.CurrentDevice);
+                await this.CurrentDevice.UpdateAssetAsync(currentAsset);
+                this.RefreshAssetsForCurrentDeviceAsync();
             }
         }
 
@@ -142,210 +145,10 @@ namespace ScreenlyManager
             var result = await dialog.ShowAsync();
             var assetId = ((Button)sender).Tag.ToString();
             if((int)result.Id == 0)
-                await Task.Run(() => this.RemoveAssetAsync(this.CurrentDevice, assetId));
+                await Task.Run(() => this.CurrentDevice.RemoveAssetAsync(assetId));
 
-            this.LoadAssetsForDevice(this.CurrentDevice);
+            this.RefreshAssetsForCurrentDeviceAsync();
         }
-
-        #endregion
-
-        #region Screenly API methods
-
-        /// <summary>
-        /// Get assets trought Screenly API
-        /// </summary>
-        /// <param name="d">Selected device</param>
-        /// <returns>List of assets</returns>
-        public async Task<List<Asset>> GetAssetsAsync(Device d)
-        {
-            List<Asset> returnedAssets = new List<Asset>();
-            string resultJson = string.Empty;
-            string parameters = "/api/assets";
-
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-                request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                {
-                    Stream dataStream = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    resultJson = reader.ReadToEnd();
-                }
-
-                if (!resultJson.Equals(string.Empty))
-                    returnedAssets = JsonConvert.DeserializeObject<List<Asset>>(resultJson);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while getting assets.", ex);
-            }
-
-            return returnedAssets;
-        }
-
-        /// <summary>
-        /// Remove specific asset for selected device
-        /// </summary>
-        /// <param name="d">Selected device</param>
-        /// <param name="assetId">Asset ID</param>
-        /// <returns>Boolean for result of execution</returns>
-        public async Task<bool> RemoveAssetAsync(Device d, string assetId)
-        {
-            string resultJson = string.Empty;
-            string parameters = "/api/assets/" + assetId;
-
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-                request.Method = "DELETE";
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                {
-                    Stream dataStream = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    resultJson = reader.ReadToEnd();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error when asset deleting.", ex);
-            }
-
-            return true;
-        }
-
-        public async Task<Asset> UpdateAssetAsync(Device d, Asset a)
-        {
-            Asset returnedAsset = new Asset();
-            JsonSerializerSettings settings = new JsonSerializerSettings();
-            IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
-            {
-                DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
-            };
-            settings.Converters.Add(dateConverter);
-
-            string json = JsonConvert.SerializeObject(a, settings);
-            var postData = "model=" + json;
-            var data = System.Text.Encoding.UTF8.GetBytes(postData);
-
-            string resultJson = string.Empty;
-            string parameters = "/api/assets/" + a.AssetId;
-
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                Stream dataStream = await request.GetRequestStreamAsync();
-                dataStream.Write(data, 0, data.Length);
-
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                {
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    resultJson = reader.ReadToEnd();
-                }
-
-                if (!resultJson.Equals(string.Empty))
-                    returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-            }
-            catch (WebException ex)
-            {
-                using (var stream = ex.Response.GetResponseStream())
-                using (var reader = new StreamReader(stream))
-                {
-                    throw new Exception(reader.ReadToEnd(), ex);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error while updating asset.", ex);
-            }
-
-            return returnedAsset;
-        }
-
-        //public Asset CreateAsset(Device d, Asset a)
-        //{
-        //    Asset returnedAsset = new Asset();
-        //    JsonSerializerSettings settings = new JsonSerializerSettings();
-        //    IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
-        //    {
-        //        DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
-        //    };
-        //    settings.Converters.Add(dateConverter);
-
-        //    string json = JsonConvert.SerializeObject(a, settings);
-        //    var postData = "model=" + json;
-        //    var data = Encoding.UTF8.GetBytes(postData);
-
-        //    string resultJson = string.Empty;
-        //    string parameters = "/api/assets";
-
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-        //        request.Method = "POST";
-        //        request.ContentType = "application/x-www-form-urlencoded";
-        //        request.ContentLength = data.Length;
-        //        Stream dataStream = request.GetRequestStream();
-        //        dataStream.Write(data, 0, data.Length);
-        //        dataStream.Close();
-
-        //        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-        //        {
-        //            Stream dataResponseStream = response.GetResponseStream();
-        //            StreamReader reader = new StreamReader(dataResponseStream);
-        //            resultJson = reader.ReadToEnd();
-        //            reader.Close();
-        //            dataResponseStream.Close();
-        //        }
-
-        //        if (!resultJson.Equals(string.Empty))
-        //            returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error while creating asset.", ex);
-        //    }
-        //    return returnedAsset;
-        //}
-
-        //public Asset GetAsset(Device d, string assetId)
-        //{
-        //    Asset returnedAsset = new Asset();
-        //    JsonSerializerSettings settings = new JsonSerializerSettings();
-        //    IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
-        //    {
-        //        DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
-        //    };
-        //    settings.Converters.Add(dateConverter);
-
-        //    string resultJson = string.Empty;
-        //    string parameters = "/api/assets/" + assetId;
-
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-        //        request.Method = "GET";
-        //        using (HttpWebResponse response = (HttpWebResponse)request.())
-        //        {
-        //            Stream dataStream = response.GetResponseStream();
-        //            StreamReader reader = new StreamReader(dataStream);
-        //            resultJson = reader.ReadToEnd();
-        //            reader.Close();
-        //            dataStream.Close();
-        //        }
-
-        //        if (!resultJson.Equals(string.Empty))
-        //            returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(string.Format("Error while getting asset {0}", assetId), ex);
-        //    }
-
-        //    return returnedAsset;
-        //}
 
         #endregion
     }
