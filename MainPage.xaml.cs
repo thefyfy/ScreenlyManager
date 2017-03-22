@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -124,12 +126,18 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private async void ToggleSwitchEnable_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            var newState = ((ToggleSwitch)sender).IsOn;
+
             Asset currentAsset = ((ToggleSwitch)sender).DataContext as Asset;
             if (currentAsset != null)
             {
-                currentAsset.IsEnabled = ((ToggleSwitch)sender).IsOn ? "1" : "0";
-                await this.CurrentDevice.UpdateAssetAsync(currentAsset);
-                this.RefreshAssetsForCurrentDeviceAsync();
+                // Don't know why, but toggled event is fired when dragging item in listview...
+                if ((currentAsset.IsEnabled.Equals("1") ? true : false) != newState)
+                {
+                    currentAsset.IsEnabled = ((ToggleSwitch)sender).IsOn ? "1" : "0";
+                    await this.CurrentDevice.UpdateAssetAsync(currentAsset);
+                    this.RefreshAssetsForCurrentDeviceAsync();
+                }
             }
         }
 
@@ -223,6 +231,11 @@ namespace ScreenlyManager
                     await dialogError.ShowAsync();
                 }
             }
+        }
+
+        private void AppBarButtonAddAsset_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddOrChangeAssetPage), null);
         }
 
         #endregion
