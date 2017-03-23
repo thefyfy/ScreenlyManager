@@ -1,14 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.UI.Popups;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -69,6 +68,8 @@ namespace ScreenlyManager
             this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.InactiveAssets;
             this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
+
+            Debug.WriteLine(string.Join(", ", this.CurrentDevice.ActiveAssets.Select(x => x.AssetId)));
         }
 
         #region View's events
@@ -231,6 +232,17 @@ namespace ScreenlyManager
                     await dialogError.ShowAsync();
                 }
             }
+        }
+
+        /// <summary>
+        /// Event fired when we change ListView active assets order
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private async void ListViewActiveAssets_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
+        {
+            var assetsInListView = ((ListView)sender).Items.OfType<Asset>().ToList();
+            await this.CurrentDevice.UpdateOrderAssetsAsync(string.Join(",", assetsInListView.Select(x => x.AssetId)));
         }
 
         private void AppBarButtonAddAsset_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)

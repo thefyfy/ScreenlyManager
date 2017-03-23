@@ -179,6 +179,47 @@ namespace ScreenlyManager
             return returnedAsset;
         }
 
+        /// <summary>
+        /// Update order of active assets throught API
+        /// </summary>
+        /// <param name="newOrder"></param>
+        /// <returns></returns>
+        public async Task UpdateOrderAssetsAsync(string newOrder)
+        {
+            var postData = "ids=" + newOrder;
+            var data = System.Text.Encoding.UTF8.GetBytes(postData);
+
+            string resultJson = string.Empty;
+            string parameters = "/api/assets/order";
+
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.HttpLink + parameters);
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                Stream dataStream = await request.GetRequestStreamAsync();
+                dataStream.Write(data, 0, data.Length);
+
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                {
+                    StreamReader reader = new StreamReader(response.GetResponseStream());
+                    resultJson = reader.ReadToEnd();
+                }
+            }
+            catch (WebException ex)
+            {
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    throw new Exception(reader.ReadToEnd(), ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while updating assets order.", ex);
+            }
+        }
+
         //public Asset CreateAsset(Device d, Asset a)
         //{
         //    Asset returnedAsset = new Asset();

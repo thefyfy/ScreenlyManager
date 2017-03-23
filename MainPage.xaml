@@ -71,7 +71,7 @@
                     <TextBlock x:Name="TextBlockActiveAsset" Text="Active assets" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
                 </Border>
                 <!-- Active Assets -->
-                <ListView x:Name="ListViewActiveAssets" Margin="10,10,10,10" CanReorderItems="True" AllowDrop="True" CanDragItems="True" SelectionMode="Extended">
+                <ListView x:Name="ListViewActiveAssets" Margin="10,10,10,10" CanReorderItems="True" AllowDrop="True" CanDragItems="True" SelectionMode="Extended" DragItemsStarting="ListViewActiveAssets_DragItemsStarting" DragItemsCompleted="ListViewActiveAssets_DragItemsCompleted">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:Asset">
                             <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
