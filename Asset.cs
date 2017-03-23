@@ -14,21 +14,6 @@ namespace ScreenlyManager
         [Newtonsoft.Json.JsonProperty(PropertyName = "mimetype")]
         public string Mimetype { get; set; }
 
-        [Newtonsoft.Json.JsonIgnore]
-        public string AssetType
-        {
-            get
-            {
-                switch (this.Mimetype)
-                {
-                    case "video": return "\uE116";
-                    case "image": return "\uEB9F";
-                    case "webpage": return "\uE128";
-                    default: return "\uEB90";
-                }
-            }
-        }
-
         [Newtonsoft.Json.JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ScreenlyManager
@@ -13,6 +15,9 @@ namespace ScreenlyManager
     {
         [Newtonsoft.Json.JsonIgnore]
         private List<Asset> Assets;
+
+        [Newtonsoft.Json.JsonIgnore]
+        public bool IsUp { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public ObservableCollection<Asset> ActiveAssets
@@ -56,6 +61,33 @@ namespace ScreenlyManager
         public Device()
         {
             this.Assets = new List<Asset>();
+            this.IsUp = false;
+        }
+
+        public async Task<bool> IsReachable()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 0, 1);
+
+                HttpResponseMessage response = await client.GetAsync(this.HttpLink);
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    this.IsUp = false;
+                    return false;
+                }
+                else
+                {
+                    this.IsUp = true;
+                    return true;
+                }
+            }
+            catch
+            {
+                this.IsUp = false;
+                return false;
+            }
         }
 
 
@@ -73,13 +105,10 @@ namespace ScreenlyManager
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.HttpLink + parameters);
-                request.Method = "GET";
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                HttpClient request = new HttpClient();
+                using (HttpResponseMessage response = await request.GetAsync(this.HttpLink + parameters))
                 {
-                    Stream dataStream = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    resultJson = reader.ReadToEnd();
+                    resultJson = await response.Content.ReadAsStringAsync();
                 }
 
                 if (!resultJson.Equals(string.Empty))
@@ -103,13 +132,10 @@ namespace ScreenlyManager
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.HttpLink + parameters);
-                request.Method = "DELETE";
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                HttpClient request = new HttpClient();
+                using (HttpResponseMessage response = await request.DeleteAsync(this.HttpLink + parameters))
                 {
-                    Stream dataStream = response.GetResponseStream();
-                    StreamReader reader = new StreamReader(dataStream);
-                    resultJson = reader.ReadToEnd();
+                    resultJson = await response.Content.ReadAsStringAsync();
                 }
             }
             catch (Exception ex)
@@ -144,23 +170,17 @@ namespace ScreenlyManager
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.HttpLink + parameters);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                Stream dataStream = await request.GetRequestStreamAsync();
-                dataStream.Write(data, 0, data.Length);
-
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                HttpClient client = new HttpClient();
+                HttpContent content = new ByteArrayContent(data, 0, data.Length);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                using (HttpResponseMessage response = await client.PostAsync(this.HttpLink + parameters, content))
                 {
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    resultJson = reader.ReadToEnd();
+                    resultJson = await response.Content.ReadAsStringAsync();
                 }
 
                 if (!resultJson.Equals(string.Empty))
                 {
                     returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-                    //var assetInList = this.Assets.Find(x => x.AssetId.Equals(returnedAsset.AssetId));
-                    //assetInList = returnedAsset;
                 }
             }
             catch (WebException ex)
@@ -194,16 +214,12 @@ namespace ScreenlyManager
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.HttpLink + parameters);
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                Stream dataStream = await request.GetRequestStreamAsync();
-                dataStream.Write(data, 0, data.Length);
-
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                HttpClient client = new HttpClient();
+                HttpContent content = new ByteArrayContent(data, 0, data.Length);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
+                using (HttpResponseMessage response = await client.PostAsync(this.HttpLink + parameters, content))
                 {
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    resultJson = reader.ReadToEnd();
+                    resultJson = await response.Content.ReadAsStringAsync();
                 }
             }
             catch (WebException ex)

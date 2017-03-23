@@ -52,7 +52,10 @@ namespace ScreenlyManager
             this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
             // Need to get list of assets for each device
             foreach (var device in this.Devices)
-                await device.GetAssetsAsync();
+            {
+                if(await device.IsReachable())
+                    await device.GetAssetsAsync();
+            }
 
             this.ListViewDevice.ItemsSource = this.Devices;
         }
@@ -68,8 +71,6 @@ namespace ScreenlyManager
             this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.InactiveAssets;
             this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
-
-            Debug.WriteLine(string.Join(", ", this.CurrentDevice.ActiveAssets.Select(x => x.AssetId)));
         }
 
         #region View's events
@@ -100,13 +101,26 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ListViewDeviceItem_Click(object sender, ItemClickEventArgs e)
+        private async void ListViewDeviceItem_Click(object sender, ItemClickEventArgs e)
         {
             var deviceCliked = (Device)e.ClickedItem;
             this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
             this.CurrentDevice = deviceCliked;
 
-            this.RefreshAssetsForCurrentDeviceAsync();
+            if(this.CurrentDevice.IsUp)
+                this.RefreshAssetsForCurrentDeviceAsync();
+            else
+            {
+                this.ListViewActiveAssets.ItemsSource = null;
+                this.ListViewInactiveAssets.ItemsSource = null;
+                this.TextBlockActiveAsset.Text = "Active assets";
+                this.TextBlockInactiveAsset.Text = "Inactive assets";
+
+                var dialog = new MessageDialog("Oops... This device is down");
+                var resultDialog = dialog.ShowAsync();
+                await Task.Delay(TimeSpan.FromSeconds(3));
+                resultDialog.Cancel();
+            }
         }
 
         /// <summary>
