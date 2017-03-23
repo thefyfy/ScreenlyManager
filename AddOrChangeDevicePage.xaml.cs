@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -23,9 +21,9 @@ namespace ScreenlyManager
     /// Une page vide peut être utilisée seule ou constituer une page de destination au sein d'un frame.
     /// Back button : http://www.wintellect.com/devcenter/jprosise/handling-the-back-button-in-windows-10-uwp-apps
     /// </summary>
-    public sealed partial class AddOrChangeAssetPage : Page
+    public sealed partial class AddOrChangeDevicePage : Page
     {
-        public AddOrChangeAssetPage()
+        public AddOrChangeDevicePage()
         {
             this.InitializeComponent();
         }

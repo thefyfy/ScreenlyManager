@@ -132,7 +132,7 @@ namespace ScreenlyManager
             Asset currentAsset = ((ToggleSwitch)sender).DataContext as Asset;
             if (currentAsset != null)
             {
-                // Don't know why, but toggled event is fired when dragging item in listview...
+                // Don't know why, but toggled event is fired when dragging item in listview (and IsOn value's keep unchanged!), so I found this work around...
                 if ((currentAsset.IsEnabled.Equals("1") ? true : false) != newState)
                 {
                     currentAsset.IsEnabled = ((ToggleSwitch)sender).IsOn ? "1" : "0";
@@ -245,9 +245,24 @@ namespace ScreenlyManager
             await this.CurrentDevice.UpdateOrderAssetsAsync(string.Join(",", assetsInListView.Select(x => x.AssetId)));
         }
 
+        /// <summary>
+        /// Go to creation of new asset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AppBarButtonAddAsset_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddOrChangeAssetPage), null);
+            this.Frame.Navigate(typeof(AddOrChangeAssetPage), this.Devices);
+        }
+
+        /// <summary>
+        /// Go to creation of new device
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AppBarButtonAddDevice_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddOrChangeDevicePage), this.Devices);
         }
 
         #endregion

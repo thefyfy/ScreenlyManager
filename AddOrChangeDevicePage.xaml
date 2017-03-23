@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="ScreenlyManager.AddOrChangeAssetPage"
+    x:Class="ScreenlyManager.AddOrChangeDevicePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ScreenlyManager"
@@ -13,8 +13,8 @@
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-
-        <TextBlock Grid.Column="1" Text="Add new asset" FontSize="30" HorizontalAlignment="Center"/>
+        
+        <TextBlock Grid.Column="1" Text="Add new device" FontSize="30" HorizontalAlignment="Center"/>
 
     </Grid>
 </Page>
