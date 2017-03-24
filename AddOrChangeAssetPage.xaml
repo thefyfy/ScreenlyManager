@@ -8,12 +8,7 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
+        
         <TextBlock Grid.Column="1" Text="Add new asset" FontSize="30" HorizontalAlignment="Center"/>
 
     </Grid>
