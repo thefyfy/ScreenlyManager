@@ -18,6 +18,7 @@
                 <Grid>
                     <!-- Left list -->
                     <TextBlock Grid.Column="0" Text="Raspberry List" FontSize="15" VerticalAlignment="Top" Margin="12,14"/>
+                    <ProgressRing Grid.Column="0" x:Name="ProgressRingLoadingDevice" Height="24" Width="24" VerticalAlignment="Top" Canvas.ZIndex="1" IsActive="False" Margin="12,14" HorizontalAlignment="Right" />
                     <CommandBar x:Name="CommandBarLeft" Grid.Column="0" VerticalAlignment="Bottom" Canvas.ZIndex="1">
                         <AppBarButton x:Name="AppBarButtonAddDevice" Icon="Add" Label="Add Device" Click="AppBarButtonAddDevice_Click"/>
                         <AppBarButton x:Name="AppBarButtonRefreshDevice" Icon="Refresh" Label="Refresh Devices" Click="AppBarButtonRefreshDevice_Click"/>
@@ -32,7 +33,7 @@
                                         <ColumnDefinition Width="48"/>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
-                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="48"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>

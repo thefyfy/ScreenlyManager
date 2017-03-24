@@ -39,6 +39,7 @@ namespace ScreenlyManager
                 this.PathDbFile = localFolder.Path + Path.DirectorySeparatorChar + DB_FILE;
                 this.LoadConfigurationAsync(this.PathDbFile);
             }
+            this.ProgressRingLoadingDevice.IsActive = true;
         }
 
         /// <summary>
@@ -56,6 +57,8 @@ namespace ScreenlyManager
                 if(await device.IsReachable())
                     await device.GetAssetsAsync();
             }
+
+            this.ProgressRingLoadingDevice.IsActive = false;
 
             this.ListViewDevice.ItemsSource = this.Devices;
         }
@@ -82,6 +85,7 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private void AppBarButtonRefreshDevice_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            this.ProgressRingLoadingDevice.IsActive = true;
             this.LoadConfigurationAsync(this.PathDbFile);
         }
         
