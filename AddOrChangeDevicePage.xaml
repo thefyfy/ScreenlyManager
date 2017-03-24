@@ -21,8 +21,8 @@
             <TextBox x:Name="TextBoxLocation" Margin="20,2" MaxLength="30" PlaceholderText="The place where he is" />
             <TextBlock Text="IP Address" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
             <TextBox x:Name="TextBoxIp" Margin="20,2"  MaxLength="30" PlaceholderText="Like 192.168.1.10" />
-            <TextBlock Text="Port" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <TextBox x:Name="TextBoxPort" Margin="20, 2" MaxLength="30" PlaceholderText="Commonly 8080" />
+            <TextBlock Text="Port" HorizontalAlignment="Left" Margin="20, 20, 20, 2" />
+            <TextBox x:Name="TextBoxPort" Margin="20, 2" MaxLength="30" PlaceholderText="Commonly 8080" InputScope="Number" />
             <RelativePanel Margin="20, 30, 20, 2" HorizontalAlignment="Right">
                 <Button Grid.Column="1" x:Name="ButtonSubmit" Content="Submit" Width="100" HorizontalAlignment="Right" Margin="0, 0, 20, 0" Click="ButtonSubmit_Click" />
                 <Button RelativePanel.RightOf="ButtonSubmit" Grid.Column="2" Width="100" x:Name="ButtonCancel" Content="Cancel" Padding="20, 4" HorizontalAlignment="Right" Click="ButtonCancel_Click"/>

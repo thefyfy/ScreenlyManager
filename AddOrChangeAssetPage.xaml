@@ -8,8 +8,37 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        
-        <TextBlock Grid.Column="1" Text="Add new asset" FontSize="30" HorizontalAlignment="Center"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <TextBlock x:Name="TextBlockTitle" Text="Add new asset" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
+            <TextBlock Text="Name" HorizontalAlignment="Left" Margin="20, 2"/>
+            <TextBox x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="Friendly name for asset" />
+            <TextBlock Text="URL" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+            <TextBox x:Name="TextBoxUrl" Margin="20,2" MaxLength="30" PlaceholderText="e.g. https://www.screenly.io/" />
+            <TextBlock Text="Asset type" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+            <ComboBox x:Name="ListBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch">
+                <ComboBoxItem>Image</ComboBoxItem>
+                <ComboBoxItem>Video</ComboBoxItem>
+                <ComboBoxItem IsSelected="True">Webpage</ComboBoxItem>
+            </ComboBox>
+            <TextBlock Text="Start date" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+            <DatePicker x:Name="DatePickerStart" Margin="20, 2" />
+            <TextBlock Text="End date" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+            <DatePicker x:Name="DatePickerEnd" Margin="20, 2" />
+            <TextBlock Text="Duration" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+            <TextBox x:Name="TextBoxDuration" Margin="20,2"  MaxLength="30" PlaceholderText="60 seconds" InputScope="Number"/>
+            <TextBlock Text="Disable cache" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+            <ToggleSwitch x:Name="ToggleSwitchDisableCache" HorizontalAlignment="Left" Margin="20, 2" IsOn="True"/>
+            <RelativePanel Margin="20, 30, 20, 2" HorizontalAlignment="Right">
+                <Button Grid.Column="1" x:Name="ButtonSubmit" Content="Submit" Width="100" HorizontalAlignment="Right" Margin="0, 0, 20, 0" />
+                <Button RelativePanel.RightOf="ButtonSubmit" Grid.Column="2" Width="100" x:Name="ButtonCancel" Content="Cancel" Padding="20, 4" HorizontalAlignment="Right" />
+            </RelativePanel>
+
+        </StackPanel>
 
     </Grid>
 </Page>
