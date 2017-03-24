@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // Pour plus d'informations sur le modèle d'élément Page vierge, consultez la page https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -22,6 +22,7 @@ namespace ScreenlyManager
 
         private List<Device> Devices;
         private Device CurrentDevice;
+        private Device CurrentRightClickDevice;
         private string PathDbFile;
 
         public MainPage()
@@ -59,7 +60,6 @@ namespace ScreenlyManager
             }
 
             this.ProgressRingLoadingDevice.IsActive = false;
-
             this.ListViewDevice.ItemsSource = this.Devices;
         }
 
@@ -74,6 +74,36 @@ namespace ScreenlyManager
             this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.InactiveAssets;
             this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
             this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
+        }
+
+        /// <summary>
+        /// Serialize devices list to file
+        /// </summary>
+        /// <param name="file">StorageFile item where JSON will write</param>
+        /// <returns>True if export was ok, false otherwise</returns>
+        private async Task<bool> SaveFileConfiguration(StorageFile file)
+        {
+            var dbContent = JsonConvert.SerializeObject(this.Devices);
+
+            if (file != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+                await FileIO.WriteTextAsync(file, dbContent);
+                Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+
+                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                {
+                    var dialog = new MessageDialog($"Oops... File {file.Name} couldn't be saved.", "Error");
+                    dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
+                    dialog.DefaultCommandIndex = 0;
+                    var result = await dialog.ShowAsync();
+                    return false;
+                }
+                else
+                    return true;
+            }
+            else
+                return false;
         }
 
         #region View's events
@@ -197,11 +227,9 @@ namespace ScreenlyManager
             StorageFile file = await savePicker.PickSaveFileAsync();
             if (file != null)
             {
-                CachedFileManager.DeferUpdates(file);
-                await FileIO.WriteTextAsync(file, dbContent);
-                Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                bool status = await this.SaveFileConfiguration(file);
                 var dialog = new MessageDialog($"Configuration exported to {file.Name}", "Backup created");
-                if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
+                if (!status)
                 {
                     dialog.Content = $"File {file.Name} couldn't be saved.";
                     dialog.Title = "Error";
@@ -270,7 +298,7 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private void AppBarButtonAddAsset_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddOrChangeAssetPage), this.Devices);
+            this.Frame.Navigate(typeof(AddOrChangeAssetPage), null);
         }
 
         /// <summary>
@@ -280,7 +308,50 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private void AppBarButtonAddDevice_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddOrChangeDevicePage), this.Devices);
+            this.Frame.Navigate(typeof(AddOrChangeDevicePage), null);
+        }
+
+        /// <summary>
+        /// Right click on device item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListViewDevice_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
+        {
+            ListView listView = (ListView)sender;
+            this.MenuFlyoutDevice.ShowAt(listView, e.GetPosition(listView));
+            var device = ((FrameworkElement)e.OriginalSource).DataContext;
+            if (device == null)
+                this.MenuFlyoutDevice.Hide();
+            else
+                this.CurrentRightClickDevice = device as Device;
+        }
+
+        /// <summary>
+        /// Remove item from devices list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MenuFlyoutItemRemoveDevice_Click(object sender, RoutedEventArgs e)
+        {
+            this.ProgressRingLoadingDevice.IsActive = true;
+            this.Devices.Remove(this.CurrentRightClickDevice);
+
+            StorageFile file = await StorageFile.GetFileFromPathAsync(this.PathDbFile);
+            await this.SaveFileConfiguration(file);
+            
+            this.CurrentRightClickDevice = null;
+            this.LoadConfigurationAsync(this.PathDbFile);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuFlyoutItemEditDevice_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AddOrChangeDevicePage), this.CurrentRightClickDevice);
         }
 
         #endregion

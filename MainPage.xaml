@@ -25,7 +25,7 @@
                         <AppBarButton x:Name="AppBarButtonExportConf" Icon="SaveLocal" Label="Export configuration" Click="AppBarButtonExportConf_Click"/>
                         <AppBarButton x:Name="AppBarButtonImportConf" Icon="Upload" Label="Import configuration" Click="AppBarButtonImportConf_Click"/>
                     </CommandBar>
-                    <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,10" ItemClick="ListViewDeviceItem_Click" IsItemClickEnabled="True" IsMultiSelectCheckBoxEnabled="False">
+                    <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,10" ItemClick="ListViewDeviceItem_Click" IsItemClickEnabled="True" IsMultiSelectCheckBoxEnabled="False" RightTapped="ListViewDevice_RightTapped">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="local:Device">
                                 <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
@@ -55,6 +55,14 @@
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             </Style>
                         </ListView.ItemContainerStyle>
+                        <ListView.Resources>
+                            <MenuFlyout x:Name="MenuFlyoutDevice">
+                                <MenuFlyout.Items>
+                                    <MenuFlyoutItem x:Name="MenuFlyoutItemEditDevice"  Text="Edit" Click="MenuFlyoutItemEditDevice_Click" />
+                                    <MenuFlyoutItem x:Name="MenuFlyoutItemRemoveDevice" Text="Remove" Click="MenuFlyoutItemRemoveDevice_Click" />
+                                </MenuFlyout.Items>
+                            </MenuFlyout>
+                        </ListView.Resources>
                     </ListView>
                 </Grid>
             </SplitView.Pane>

@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         
         <StackPanel Grid.Column="0">
-            <TextBlock Text="Add new device" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
+            <TextBlock x:Name="TextBlockTitle" Text="Add new device" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
             <TextBlock Text="Name" HorizontalAlignment="Left" Margin="20, 2"/>
             <TextBox x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="Friendly name for device" />
             <TextBlock Text="Location" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
