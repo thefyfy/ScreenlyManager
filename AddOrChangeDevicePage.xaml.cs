@@ -23,6 +23,7 @@ namespace ScreenlyManager
         private const string DB_FILE = "db.json";
         private string PathDbFile;
         private Device ExistingDevice;
+        private Windows.ApplicationModel.Resources.ResourceLoader Loader;
 
         public AddOrChangeDevicePage()
         {
@@ -30,6 +31,8 @@ namespace ScreenlyManager
             // AppData folder access
             var localFolder = ApplicationData.Current.LocalFolder;
             this.PathDbFile = localFolder.Path + Path.DirectorySeparatorChar + DB_FILE;
+
+            this.Loader = new Windows.ApplicationModel.Resources.ResourceLoader();
 
             this.InitializeComponent();
         }
@@ -48,7 +51,7 @@ namespace ScreenlyManager
                 this.TextBoxLocation.Text = this.ExistingDevice.Location;
                 this.TextBoxIp.Text = this.ExistingDevice.IpAddress;
                 this.TextBoxPort.Text = this.ExistingDevice.Port;
-                this.TextBlockTitle.Text = $"Edit device \"{ this.ExistingDevice.Name }\"";
+                this.TextBlockTitle.Text = $"{ this.Loader.GetString("EditDevice") } \"{ this.ExistingDevice.Name }\"";
             }
         }
 
@@ -79,11 +82,11 @@ namespace ScreenlyManager
                     CachedFileManager.DeferUpdates(file);
                     await FileIO.WriteTextAsync(file, dbContent);
                     Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                    var dialog = new MessageDialog(this.ExistingDevice != null ? "The device has been updated" : "The new device has been added");
+                    var dialog = new MessageDialog(this.ExistingDevice != null ? this.Loader.GetString("ConfirmationEditDevice") : this.Loader.GetString("ConfirmationAddDevice"));
                     if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
                     {
-                        dialog.Content = "Cannot save configuration.";
-                        dialog.Title = "Error";
+                        dialog.Content = this.Loader.GetString("ErrorCannotSave");
+                        dialog.Title = this.Loader.GetString("Error");
                     }
                     dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
                     dialog.DefaultCommandIndex = 0;
@@ -94,7 +97,7 @@ namespace ScreenlyManager
             }
             else
             {
-                var dialogError = new MessageDialog($"Oops... You have to fill at least this fields : \"Name\", \"IP Address\" and \"Port\"");
+                var dialogError = new MessageDialog(this.Loader.GetString("RequiredFileds"));
                 dialogError.Commands.Add(new UICommand("Ok") { Id = 0 });
                 dialogError.DefaultCommandIndex = 0;
                 await dialogError.ShowAsync();

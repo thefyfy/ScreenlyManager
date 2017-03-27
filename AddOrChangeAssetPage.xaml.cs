@@ -25,9 +25,34 @@ namespace ScreenlyManager
     /// </summary>
     public sealed partial class AddOrChangeAssetPage : Page
     {
+        private List<Device> Devices { get; set; }
+
         public AddOrChangeAssetPage()
         {
+            this.Devices = null;
+
             this.InitializeComponent();
+
+            this.DatePickerEnd.Date = DateTime.Now.AddDays(1);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (e.Parameter != null && e.Parameter is List<Device>)
+            {
+                this.Devices = e.Parameter as List<Device>;
+                this.GridViewDevices.ItemsSource = this.Devices.Where(x => x.IsUp);
+            }
+        }
+
+        private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MainPage), null);
         }
     }
 }

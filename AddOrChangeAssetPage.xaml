@@ -10,35 +10,64 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0">
-            <TextBlock x:Name="TextBlockTitle" Text="Add new asset" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
-            <TextBlock Text="Name" HorizontalAlignment="Left" Margin="20, 2"/>
-            <TextBox x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="Friendly name for asset" />
-            <TextBlock Text="URL" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <TextBox x:Name="TextBoxUrl" Margin="20,2" MaxLength="30" PlaceholderText="e.g. https://www.screenly.io/" />
-            <TextBlock Text="Asset type" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <ComboBox x:Name="ListBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch">
-                <ComboBoxItem>Image</ComboBoxItem>
-                <ComboBoxItem>Video</ComboBoxItem>
-                <ComboBoxItem IsSelected="True">Webpage</ComboBoxItem>
-            </ComboBox>
-            <TextBlock Text="Start date" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <DatePicker x:Name="DatePickerStart" Margin="20, 2" />
-            <TextBlock Text="End date" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <DatePicker x:Name="DatePickerEnd" Margin="20, 2" />
-            <TextBlock Text="Duration" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <TextBox x:Name="TextBoxDuration" Margin="20,2"  MaxLength="30" PlaceholderText="60 seconds" InputScope="Number"/>
-            <TextBlock Text="Disable cache" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <ToggleSwitch x:Name="ToggleSwitchDisableCache" HorizontalAlignment="Left" Margin="20, 2" IsOn="True"/>
-            <RelativePanel Margin="20, 30, 20, 2" HorizontalAlignment="Right">
-                <Button Grid.Column="1" x:Name="ButtonSubmit" Content="Submit" Width="100" HorizontalAlignment="Right" Margin="0, 0, 20, 0" />
-                <Button RelativePanel.RightOf="ButtonSubmit" Grid.Column="2" Width="100" x:Name="ButtonCancel" Content="Cancel" Padding="20, 4" HorizontalAlignment="Right" />
-            </RelativePanel>
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel MaxWidth="960" HorizontalAlignment="Left" Margin="0,0,0,20">
+                <TextBlock x:Uid="AddAssetTitle" x:Name="TextBlockTitle" Text="" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
+                <TextBlock x:Uid="AddAssetName" Text="" HorizontalAlignment="Left" Margin="20, 2"/>
+                <TextBox x:Uid="AddAssetNameTextBox" x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="" />
+                <TextBlock x:Uid="AddAssetUrl" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <TextBox x:Uid="AddAssetUrlTextBox" x:Name="TextBoxUrl" Margin="20,2" MaxLength="30" PlaceholderText="" />
+                <TextBlock x:Uid="AddAssetType" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <ComboBox x:Name="ListBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch">
+                    <ComboBoxItem x:Uid="AddAssetImage" Content="" />
+                    <ComboBoxItem x:Uid="AddAssetVideo" Content="" />
+                    <ComboBoxItem x:Uid="AddAssetWebpage" Content="" />
+                </ComboBox>
+                <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <RelativePanel Margin="20, 2">
+                    <DatePicker x:Name="DatePickerStart" />
+                    <TimePicker x:Name="TimePickerStart" RelativePanel.RightOf="DatePickerStart" Margin="20, 0, 0, 0" />
+                </RelativePanel>
+                <TextBlock x:Uid="AddAssetEndDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <RelativePanel Margin="20, 2">
+                    <DatePicker x:Name="DatePickerEnd" />
+                    <TimePicker x:Name="TimePickerEnd" RelativePanel.RightOf="DatePickerEnd" Margin="20, 0, 0, 0" />
+                </RelativePanel>
+                <TextBlock x:Uid="AddAssetDuration" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <TextBox x:Uid="AddAssetDurationTextBox" x:Name="TextBoxDuration" Margin="20,2"  MaxLength="30" PlaceholderText="" InputScope="Number"/>
+                <TextBlock x:Uid="AddAssetCache" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <ToggleSwitch x:Uid="AddAssetCacheToggle" x:Name="ToggleSwitchDisableCache" HorizontalAlignment="Left" Margin="20, 2" OnContent="" OffContent=""/>
 
-        </StackPanel>
+                <TextBlock x:Uid="AddAssetDevice" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <GridView x:Name="GridViewDevices" SelectionMode="Multiple" Margin="20,2">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Device">
+                            <Grid Height="52" Width="210" Margin="4,4,4,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="48"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="3*"/>
+                                    <RowDefinition Height="2*"/>
+                                </Grid.RowDefinitions>
 
+                                <Image Grid.RowSpan="2" Grid.Column="0" Source="Assets/raspberry-36.png" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="None"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind Name}" Margin="4,2,4,0" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Location}" Margin="4,0,4,2" HorizontalAlignment="Left" FontSize="12"/>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            
+                <RelativePanel Margin="20, 30, 20, 2" HorizontalAlignment="Right">
+                    <Button x:Uid="AddAssetSubmit" Grid.Column="1" x:Name="ButtonSubmit" Content="" Width="100" HorizontalAlignment="Right" Margin="0, 0, 20, 0" Click="ButtonSubmit_Click"/>
+                    <Button x:Uid="AddAssetCancel" RelativePanel.RightOf="ButtonSubmit" Grid.Column="2" Width="100" x:Name="ButtonCancel" Content="" Padding="20, 4" HorizontalAlignment="Right" Click="ButtonCancel_Click"/>
+                </RelativePanel>
+
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

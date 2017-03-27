@@ -10,24 +10,26 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <StackPanel Grid.Column="0">
-            <TextBlock x:Name="TextBlockTitle" Text="Add new device" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
-            <TextBlock Text="Name" HorizontalAlignment="Left" Margin="20, 2"/>
-            <TextBox x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="Friendly name for device" />
-            <TextBlock Text="Location" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <TextBox x:Name="TextBoxLocation" Margin="20,2" MaxLength="30" PlaceholderText="The place where he is" />
-            <TextBlock Text="IP Address" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-            <TextBox x:Name="TextBoxIp" Margin="20,2"  MaxLength="30" PlaceholderText="Like 192.168.1.10" />
-            <TextBlock Text="Port" HorizontalAlignment="Left" Margin="20, 20, 20, 2" />
-            <TextBox x:Name="TextBoxPort" Margin="20, 2" MaxLength="30" PlaceholderText="Commonly 8080" InputScope="Number" />
-            <RelativePanel Margin="20, 30, 20, 2" HorizontalAlignment="Right">
-                <Button Grid.Column="1" x:Name="ButtonSubmit" Content="Submit" Width="100" HorizontalAlignment="Right" Margin="0, 0, 20, 0" Click="ButtonSubmit_Click" />
-                <Button RelativePanel.RightOf="ButtonSubmit" Grid.Column="2" Width="100" x:Name="ButtonCancel" Content="Cancel" Padding="20, 4" HorizontalAlignment="Right" Click="ButtonCancel_Click"/>
-            </RelativePanel>
 
-        </StackPanel>
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel MaxWidth="960" HorizontalAlignment="Left" Margin="0,0,0,20">
+                <TextBlock x:Uid="AddDeviceTitle" x:Name="TextBlockTitle" Text="" FontSize="30" HorizontalAlignment="Left" Margin="20, 12"/>
+                <TextBlock x:Uid="AddDeviceName" Text="" HorizontalAlignment="Left" Margin="20, 2"/>
+                <TextBox x:Uid="AddDeviceNameTextBox" x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="" />
+                <TextBlock x:Uid="AddDeviceLocation" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <TextBox x:Uid="AddDeviceLocationTextBox" x:Name="TextBoxLocation" Margin="20,2" MaxLength="30" PlaceholderText="" />
+                <TextBlock x:Uid="AddDeviceIp" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <TextBox x:Uid="AddDeviceIpTextBox" x:Name="TextBoxIp" Margin="20,2"  MaxLength="30" PlaceholderText="" />
+                <TextBlock x:Uid="AddDevicePort" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2" />
+                <TextBox x:Uid="AddDevicePortTextBox" x:Name="TextBoxPort" Margin="20, 2" MaxLength="5" PlaceholderText="" InputScope="Number" />
+                
+                <RelativePanel Margin="20, 30, 20, 2" HorizontalAlignment="Right">
+                    <Button x:Uid="AddDeviceSubmit" Grid.Column="1" x:Name="ButtonSubmit" Content="Submit" Width="100" HorizontalAlignment="Right" Margin="0, 0, 20, 0" Click="ButtonSubmit_Click" />
+                    <Button x:Uid="AddDeviceCancel" RelativePanel.RightOf="ButtonSubmit" Grid.Column="2" Width="100" x:Name="ButtonCancel" Content="Cancel" Padding="20, 4" HorizontalAlignment="Right" Click="ButtonCancel_Click"/>
+                </RelativePanel>
+                
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -24,9 +24,12 @@ namespace ScreenlyManager
         private Device CurrentDevice;
         private Device CurrentRightClickDevice;
         private string PathDbFile;
+        private Windows.ApplicationModel.Resources.ResourceLoader Loader;
 
         public MainPage()
         {
+            this.Loader = new Windows.ApplicationModel.Resources.ResourceLoader();
+
             this.InitializeComponent();
 
             // AppData folder access
@@ -60,6 +63,7 @@ namespace ScreenlyManager
             }
 
             this.ProgressRingLoadingDevice.IsActive = false;
+            this.AppBarButtonAddAsset.IsEnabled = true;
             this.ListViewDevice.ItemsSource = this.Devices;
         }
 
@@ -72,8 +76,8 @@ namespace ScreenlyManager
 
             this.ListViewActiveAssets.ItemsSource = this.CurrentDevice.ActiveAssets;
             this.ListViewInactiveAssets.ItemsSource = this.CurrentDevice.InactiveAssets;
-            this.TextBlockActiveAsset.Text = $"Active assets ({this.ListViewActiveAssets.Items.Count})";
-            this.TextBlockInactiveAsset.Text = $"Inactive assets ({this.ListViewInactiveAssets.Items.Count})";
+            this.TextBlockActiveAsset.Text = $"{ this.Loader.GetString("ActiveAssets") } ({this.ListViewActiveAssets.Items.Count})";
+            this.TextBlockInactiveAsset.Text = $"{ this.Loader.GetString("InactiveAssets") } ({this.ListViewInactiveAssets.Items.Count})";
         }
 
         /// <summary>
@@ -93,7 +97,7 @@ namespace ScreenlyManager
 
                 if (status != Windows.Storage.Provider.FileUpdateStatus.Complete)
                 {
-                    var dialog = new MessageDialog($"Oops... File {file.Name} couldn't be saved.", "Error");
+                    var dialog = new MessageDialog(string.Format(this.Loader.GetString("ErrorCannotSaveFile"), file.Name), this.Loader.GetString("Error"));
                     dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
                     dialog.DefaultCommandIndex = 0;
                     var result = await dialog.ShowAsync();
@@ -116,6 +120,7 @@ namespace ScreenlyManager
         private void AppBarButtonRefreshDevice_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             this.ProgressRingLoadingDevice.IsActive = true;
+            this.AppBarButtonAddAsset.IsEnabled = false;
             this.LoadConfigurationAsync(this.PathDbFile);
         }
         
@@ -137,8 +142,8 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private async void ListViewDeviceItem_Click(object sender, ItemClickEventArgs e)
         {
-            var deviceCliked = (Device)e.ClickedItem;
-            this.TextBlockCommandBarMain.Text = $"Schedule Overview - {deviceCliked.Name}";
+            var deviceCliked = e.ClickedItem as Device;
+            this.TextBlockCommandBarMain.Text = $"{ this.Loader.GetString("ScheduleOverview") } - {deviceCliked.Name}";
             this.CurrentDevice = deviceCliked;
 
             if(this.CurrentDevice.IsUp)
@@ -147,10 +152,10 @@ namespace ScreenlyManager
             {
                 this.ListViewActiveAssets.ItemsSource = null;
                 this.ListViewInactiveAssets.ItemsSource = null;
-                this.TextBlockActiveAsset.Text = "Active assets";
-                this.TextBlockInactiveAsset.Text = "Inactive assets";
+                this.TextBlockActiveAsset.Text = this.Loader.GetString("ActiveAssets");
+                this.TextBlockInactiveAsset.Text = this.Loader.GetString("InactiveAssets");
 
-                var dialog = new MessageDialog("Oops... This device is down");
+                var dialog = new MessageDialog(this.Loader.GetString("DeviceDown"));
                 var resultDialog = dialog.ShowAsync();
                 await Task.Delay(TimeSpan.FromSeconds(3));
                 resultDialog.Cancel();
@@ -164,7 +169,7 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private async void ButtonPreview_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (Uri.TryCreate((((Button)sender).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
+            if (Uri.TryCreate(((sender as Button).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
         }
         
@@ -175,15 +180,15 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private async void ToggleSwitchEnable_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var newState = ((ToggleSwitch)sender).IsOn;
+            var newState = (sender as ToggleSwitch).IsOn;
 
-            Asset currentAsset = ((ToggleSwitch)sender).DataContext as Asset;
+            Asset currentAsset = (sender as ToggleSwitch).DataContext as Asset;
             if (currentAsset != null)
             {
                 // Don't know why, but toggled event is fired when dragging item in listview (and IsOn value's keep unchanged!), so I found this work around...
                 if ((currentAsset.IsEnabled.Equals("1") ? true : false) != newState)
                 {
-                    currentAsset.IsEnabled = ((ToggleSwitch)sender).IsOn ? "1" : "0";
+                    currentAsset.IsEnabled = (sender as ToggleSwitch).IsOn ? "1" : "0";
                     await this.CurrentDevice.UpdateAssetAsync(currentAsset);
                     this.RefreshAssetsForCurrentDeviceAsync();
                 }
@@ -197,13 +202,13 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private async void ButtonRemove_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var dialog = new MessageDialog("Are you sure to delete this item?", "Delete");
-            dialog.Commands.Add(new UICommand("Yes") { Id = 0 });
-            dialog.Commands.Add(new UICommand("No") { Id = 1 });
+            var dialog = new MessageDialog(this.Loader.GetString("ConfirmDelete"), this.Loader.GetString("Delete"));
+            dialog.Commands.Add(new UICommand(this.Loader.GetString("Yes")) { Id = 0 });
+            dialog.Commands.Add(new UICommand(this.Loader.GetString("No")) { Id = 1 });
             dialog.DefaultCommandIndex = 0;
             dialog.CancelCommandIndex = 1;
             var result = await dialog.ShowAsync();
-            var assetId = ((Button)sender).Tag.ToString();
+            var assetId = (sender as Button).Tag.ToString();
             if((int)result.Id == 0)
                 await Task.Run(() => this.CurrentDevice.RemoveAssetAsync(assetId));
 
@@ -228,11 +233,11 @@ namespace ScreenlyManager
             if (file != null)
             {
                 bool status = await this.SaveFileConfiguration(file);
-                var dialog = new MessageDialog($"Configuration exported to {file.Name}", "Backup created");
+                var dialog = new MessageDialog(this.Loader.GetString("ConfigurationExported") + file.Name, this.Loader.GetString("BackupCreated"));
                 if (!status)
                 {
-                    dialog.Content = $"File {file.Name} couldn't be saved.";
-                    dialog.Title = "Error";
+                    dialog.Content = string.Format(this.Loader.GetString("ErrorCannotSaveFile"), file.Name);
+                    dialog.Title = this.Loader.GetString("Error");
                 }
                 dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
                 dialog.DefaultCommandIndex = 0;
@@ -265,14 +270,14 @@ namespace ScreenlyManager
 
                     this.LoadConfigurationAsync(this.PathDbFile);
 
-                    var dialog = new MessageDialog($"Configuration imported from {file.Name}", "Import completed");
+                    var dialog = new MessageDialog(this.Loader.GetString("ConfigurationImported") + file.Name, this.Loader.GetString("ImportCompleted"));
                     dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
                     dialog.DefaultCommandIndex = 0;
                     var result = await dialog.ShowAsync();
                 }
                 catch(Exception ex)
                 {
-                    var dialogError = new MessageDialog($"Oops... {file.Name} is an invalid file. We cannot grab \"Devices\" in this file. See error description below : { Environment.NewLine + ex.Message }");
+                    var dialogError = new MessageDialog(string.Format(this.Loader.GetString("InvalidFile"), file.Name) + Environment.NewLine + ex.Message);
                     dialogError.Commands.Add(new UICommand("Ok") { Id = 0 });
                     dialogError.DefaultCommandIndex = 0;
                     await dialogError.ShowAsync();
@@ -287,7 +292,7 @@ namespace ScreenlyManager
         /// <param name="args"></param>
         private async void ListViewActiveAssets_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            var assetsInListView = ((ListView)sender).Items.OfType<Asset>().ToList();
+            var assetsInListView = (sender as ListView).Items.OfType<Asset>().ToList();
             await this.CurrentDevice.UpdateOrderAssetsAsync(string.Join(",", assetsInListView.Select(x => x.AssetId)));
         }
 
@@ -298,7 +303,7 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private void AppBarButtonAddAsset_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(AddOrChangeAssetPage), null);
+            this.Frame.Navigate(typeof(AddOrChangeAssetPage), this.Devices);
         }
 
         /// <summary>
@@ -318,9 +323,9 @@ namespace ScreenlyManager
         /// <param name="e"></param>
         private void ListViewDevice_RightTapped(object sender, Windows.UI.Xaml.Input.RightTappedRoutedEventArgs e)
         {
-            ListView listView = (ListView)sender;
+            ListView listView = sender as ListView;
             this.MenuFlyoutDevice.ShowAt(listView, e.GetPosition(listView));
-            var device = ((FrameworkElement)e.OriginalSource).DataContext;
+            var device = (e.OriginalSource as FrameworkElement).DataContext;
             if (device == null)
                 this.MenuFlyoutDevice.Hide();
             else

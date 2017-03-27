@@ -17,13 +17,13 @@
             <SplitView.Pane>
                 <Grid>
                     <!-- Left list -->
-                    <TextBlock Grid.Column="0" Text="Raspberry List" FontSize="15" VerticalAlignment="Top" Margin="12,14"/>
+                    <TextBlock x:Uid="MainPageDeviceTitle" Grid.Column="0" Text="" FontSize="15" VerticalAlignment="Top" Margin="12,14"/>
                     <ProgressRing Grid.Column="0" x:Name="ProgressRingLoadingDevice" Height="24" Width="24" VerticalAlignment="Top" Canvas.ZIndex="1" IsActive="False" Margin="12,14" HorizontalAlignment="Right" />
                     <CommandBar x:Name="CommandBarLeft" Grid.Column="0" VerticalAlignment="Bottom" Canvas.ZIndex="1">
-                        <AppBarButton x:Name="AppBarButtonAddDevice" Icon="Add" Label="Add Device" Click="AppBarButtonAddDevice_Click"/>
-                        <AppBarButton x:Name="AppBarButtonRefreshDevice" Icon="Refresh" Label="Refresh Devices" Click="AppBarButtonRefreshDevice_Click"/>
-                        <AppBarButton x:Name="AppBarButtonExportConf" Icon="SaveLocal" Label="Export configuration" Click="AppBarButtonExportConf_Click"/>
-                        <AppBarButton x:Name="AppBarButtonImportConf" Icon="Upload" Label="Import configuration" Click="AppBarButtonImportConf_Click"/>
+                        <AppBarButton x:Uid="MainPageDeviceAdd" x:Name="AppBarButtonAddDevice" Icon="Add" Label="" Click="AppBarButtonAddDevice_Click"/>
+                        <AppBarButton x:Uid="MainPageDeviceRefresh" x:Name="AppBarButtonRefreshDevice" Icon="Refresh" Label="" Click="AppBarButtonRefreshDevice_Click"/>
+                        <AppBarButton x:Uid="MainPageExportConf" x:Name="AppBarButtonExportConf" Icon="SaveLocal" Label="" Click="AppBarButtonExportConf_Click"/>
+                        <AppBarButton x:Uid="MainPageImportConf" x:Name="AppBarButtonImportConf" Icon="Upload" Label="" Click="AppBarButtonImportConf_Click"/>
                     </CommandBar>
                     <ListView x:Name="ListViewDevice" Grid.Column="0" Margin="10,50,10,10" ItemClick="ListViewDeviceItem_Click" IsItemClickEnabled="True" IsMultiSelectCheckBoxEnabled="False" RightTapped="ListViewDevice_RightTapped">
                         <ListView.ItemTemplate>
@@ -71,15 +71,15 @@
                 <!-- Main Page -->
                 <CommandBar x:Name="CommandBarMain" Grid.Column="1">
                     <CommandBar.Content>
-                        <TextBlock x:Name="TextBlockCommandBarMain" Text="Schedule Overview" Margin="12,14"/>
+                        <TextBlock x:Uid="MainPageAssetTitle" x:Name="TextBlockCommandBarMain" Text="" Margin="12,14"/>
                     </CommandBar.Content>
-                    <AppBarButton x:Name="AppBarButtonAddAsset" Icon="Add" Label="Add Asset" Click="AppBarButtonAddAsset_Click"/>
-                    <AppBarButton x:Name="AppBarButtonRefreshAssets" Icon="Refresh" Label="Refresh Assets" Click="AppBarButtonRefreshAssets_Click"/>
+                    <AppBarButton x:Uid="MainPageAssetAdd" x:Name="AppBarButtonAddAsset" Icon="Add" Label="" Click="AppBarButtonAddAsset_Click" IsEnabled="False"/>
+                    <AppBarButton x:Uid="MainPageAssetRefresh" x:Name="AppBarButtonRefreshAssets" Icon="Refresh" Label="" Click="AppBarButtonRefreshAssets_Click"/>
                 </CommandBar>
                 <ScrollViewer Grid.Column="1" Margin="10,50,10,10" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
                         <Border Background="#FFBC1142">
-                            <TextBlock x:Name="TextBlockActiveAsset" Text="Active assets" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
+                            <TextBlock x:Uid="MainPageAssetActive" x:Name="TextBlockActiveAsset" Text="" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
                         </Border>
                         <!-- Active Assets -->
                         <ListView x:Name="ListViewActiveAssets" Margin="10,10,10,10" CanReorderItems="True" AllowDrop="True" CanDragItems="True" SelectionMode="Extended" DragItemsCompleted="ListViewActiveAssets_DragItemsCompleted">
@@ -120,7 +120,7 @@
                         </ListView>
 
                         <Border Background="#FFBC1142">
-                            <TextBlock x:Name="TextBlockInactiveAsset" Text="Inactive assets" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
+                            <TextBlock x:Uid="MainPageAssetInactive" x:Name="TextBlockInactiveAsset" Text="" Padding="10,15" Foreground="#FFFFFF" FontSize="20"/>
                         </Border>
                         <!-- Inactive Assets -->
                         <ListView x:Name="ListViewInactiveAssets" Margin="10,10,10,10" IsMultiSelectCheckBoxEnabled="False">
