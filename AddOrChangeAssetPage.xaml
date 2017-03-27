@@ -21,9 +21,9 @@
                 <TextBox x:Uid="AddAssetUrlTextBox" x:Name="TextBoxUrl" Margin="20,2" MaxLength="30" PlaceholderText="" />
                 <TextBlock x:Uid="AddAssetType" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <ComboBox x:Name="ListBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch">
-                    <ComboBoxItem x:Uid="AddAssetImage" Content="" />
+                    <ComboBoxItem x:Uid="AddAssetImage" Content=""/>
                     <ComboBoxItem x:Uid="AddAssetVideo" Content="" />
-                    <ComboBoxItem x:Uid="AddAssetWebpage" Content="" />
+                    <ComboBoxItem IsSelected="True" x:Uid="AddAssetWebpage" Content="" />
                 </ComboBox>
                 <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <RelativePanel Margin="20, 2">
