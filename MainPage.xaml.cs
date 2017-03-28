@@ -172,27 +172,16 @@ namespace ScreenlyManager
             if (Uri.TryCreate(((sender as Button).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
         }
-        
+
         /// <summary>
-        /// Enable/disable an asset
+        /// Edit selected asset
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ToggleSwitchEnable_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void ButtonEdit_Click(object sender, RoutedEventArgs e)
         {
-            var newState = (sender as ToggleSwitch).IsOn;
-
-            Asset currentAsset = (sender as ToggleSwitch).DataContext as Asset;
-            if (currentAsset != null)
-            {
-                // Don't know why, but toggled event is fired when dragging item in listview (and IsOn value's keep unchanged!), so I found this work around...
-                if ((currentAsset.IsEnabled.Equals("1") ? true : false) != newState)
-                {
-                    currentAsset.IsEnabled = (sender as ToggleSwitch).IsOn ? "1" : "0";
-                    await this.CurrentDevice.UpdateAssetAsync(currentAsset);
-                    this.RefreshAssetsForCurrentDeviceAsync();
-                }
-            }
+            var assetId = (sender as Button).Tag.ToString();
+            this.Frame.Navigate(typeof(AddOrChangeAssetPage), new Tuple<Device, string>(this.CurrentDevice, assetId));
         }
 
         /// <summary>
@@ -213,6 +202,28 @@ namespace ScreenlyManager
                 await Task.Run(() => this.CurrentDevice.RemoveAssetAsync(assetId));
 
             this.RefreshAssetsForCurrentDeviceAsync();
+        }
+
+        /// <summary>
+        /// Enable/disable an asset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ToggleSwitchEnable_Toggled(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            var newState = (sender as ToggleSwitch).IsOn;
+
+            Asset currentAsset = (sender as ToggleSwitch).DataContext as Asset;
+            if (currentAsset != null)
+            {
+                // Don't know why, but toggled event is fired when dragging item in listview (and IsOn value's keep unchanged!), so I found this work around...
+                if ((currentAsset.IsEnabled.Equals("1") ? true : false) != newState)
+                {
+                    currentAsset.IsEnabled = (sender as ToggleSwitch).IsOn ? "1" : "0";
+                    await this.CurrentDevice.UpdateAssetAsync(currentAsset);
+                    this.RefreshAssetsForCurrentDeviceAsync();
+                }
+            }
         }
 
         /// <summary>
@@ -350,7 +361,7 @@ namespace ScreenlyManager
         }
 
         /// <summary>
-        /// 
+        /// Edit item from devices list
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -286,6 +286,42 @@ namespace ScreenlyManager
             }
         }
 
+        /// <summary>
+        /// Return asset identified by asset ID in param API
+        /// </summary>
+        /// <param name="assetId">Asset ID to find on device</param>
+        /// <returns></returns>
+        public async Task<Asset> GetAssetAsync(string assetId)
+        {
+            Asset returnedAsset = new Asset();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
+            {
+                DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
+            };
+            settings.Converters.Add(dateConverter);
+
+            string resultJson = string.Empty;
+            string parameters = "/api/assets/" + assetId;
+
+            try
+            {
+                HttpClient request = new HttpClient();
+                using (HttpResponseMessage response = await request.GetAsync(this.HttpLink + parameters))
+                {
+                    resultJson = await response.Content.ReadAsStringAsync();
+                }
+
+                if (!resultJson.Equals(string.Empty))
+                    return JsonConvert.DeserializeObject<Asset>(resultJson);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while getting assets.", ex);
+            }
+            return null;
+        }
+
         #endregion
     }
 }

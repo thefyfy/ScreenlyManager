@@ -246,7 +246,7 @@
     <comment>MainPage.xaml</comment>
   </data>
   <data name="ConfirmationAddAsset" xml:space="preserve">
-    <value>Votre nouvel affichage vient d'être déployé sur les écrans précédemment sélectionnés</value>
+    <value>Votre nouvel affichage vient d'être déployé sur les écrans sélectionnés</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="ConfirmationAddDevice" xml:space="preserve">
@@ -368,5 +368,13 @@
   <data name="Yes" xml:space="preserve">
     <value>Oui</value>
     <comment>MainPage.xaml</comment>
+  </data>
+  <data name="ConfirmationUpdateAsset" xml:space="preserve">
+    <value>Votre affichage vient d'être mis à jour</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="EditAsset" xml:space="preserve">
+    <value>Modifier l'affichage "{0}" sur "{1}"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
 </root>

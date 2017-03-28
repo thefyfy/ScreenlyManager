@@ -369,4 +369,12 @@
     <value>Yes</value>
     <comment>MainPage.xaml</comment>
   </data>
+  <data name="ConfirmationUpdateAsset" xml:space="preserve">
+    <value>Your view has just been updated</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="EditAsset" xml:space="preserve">
+    <value>Edit asset "{0}" on "{1}"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
 </root>

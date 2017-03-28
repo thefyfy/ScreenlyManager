@@ -17,13 +17,17 @@ namespace ScreenlyManager
     public sealed partial class AddOrChangeAssetPage : Page
     {
         private List<Device> Devices { get; set; }
+        private Device DeviceToUpdate { get; set; }
+        private Asset AssetToUpdate { get; set; }
         public List<Tuple<string, string>> MimeTypes { get; set; }
+        private bool IsAnUpdate { get; set; }
 
         private Windows.ApplicationModel.Resources.ResourceLoader Loader;
 
         public AddOrChangeAssetPage()
         {
             this.Devices = null;
+            this.AssetToUpdate = new Asset();
 
             this.Loader = new Windows.ApplicationModel.Resources.ResourceLoader();
             this.MimeTypes = new List<Tuple<string, string>>()
@@ -38,31 +42,48 @@ namespace ScreenlyManager
             this.DatePickerEnd.Date = DateTime.Now.AddDays(1);
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             if (e.Parameter != null && e.Parameter is List<Device>)
             {
-                this.GridViewDevices.Visibility = Visibility.Collapsed;
-                this.TextBlockDevice.Visibility = Visibility.Collapsed;
-                this.Devices = e.Parameter as List<Device>;
-                this.GridViewDevices.ItemsSource = this.Devices.Where(x => x.IsUp);
-            }
-            else if (e.Parameter != null && e.Parameter is Tuple<Device, Asset>)
-            {
                 this.GridViewDevices.Visibility = Visibility.Visible;
                 this.TextBlockDevice.Visibility = Visibility.Visible;
-                
+                this.Devices = e.Parameter as List<Device>;
+                this.GridViewDevices.ItemsSource = this.Devices.Where(x => x.IsUp);
+                this.IsAnUpdate = false;
+            }
+            else if (e.Parameter != null && e.Parameter is Tuple<Device, string>)
+            {
+                this.GridViewDevices.Visibility = Visibility.Collapsed;
+                this.TextBlockDevice.Visibility = Visibility.Collapsed;
+                this.IsAnUpdate = true;
+                this.DeviceToUpdate = (e.Parameter as Tuple<Device, string>).Item1;
+                string assetIdToUpdate = (e.Parameter as Tuple<Device, string>).Item2;
+
+                this.AssetToUpdate = await this.DeviceToUpdate.GetAssetAsync(assetIdToUpdate);
+
+                this.TextBoxName.Text = this.AssetToUpdate.Name;
+                this.TextBoxUrl.Text = this.AssetToUpdate.ReadableUri;
+                this.ComboBoxAssetType.SelectedItem = this.MimeTypes.Where(x => x.Item1.Equals(this.AssetToUpdate.Mimetype)).FirstOrDefault();
+                this.DatePickerStart.Date = this.AssetToUpdate.StartDate;
+                this.TimePickerStart.Time = this.AssetToUpdate.StartDate.TimeOfDay;
+                this.DatePickerEnd.Date = this.AssetToUpdate.EndDate;
+                this.TimePickerEnd.Time = this.AssetToUpdate.EndDate.TimeOfDay;
+                this.TextBoxDuration.Text = this.AssetToUpdate.Duration;
+                this.ToggleSwitchEnable.IsOn = this.AssetToUpdate.IsEnabled.Equals("1") ? true : false;
+                this.ToggleSwitchDisableCache.IsOn = this.AssetToUpdate.NoCache.Equals("1") ? true : false;
+
+                this.TextBlockTitle.Text = string.Format(this.Loader.GetString("EditAsset"), this.AssetToUpdate.Name, this.DeviceToUpdate.Name);
             }
         }
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if(!this.TextBoxName.Text.Equals(string.Empty) && !this.TextBoxUrl.Text.Equals(string.Empty) && this.DatePickerStart.Date < this.DatePickerEnd.Date && !this.TextBoxDuration.Text.Equals(string.Empty) && this.GridViewDevices.SelectedItems.Count > 0 && this.ComboBoxAssetType.SelectedValue != null)
+            if (!this.TextBoxName.Text.Equals(string.Empty) && !this.TextBoxUrl.Text.Equals(string.Empty) && this.DatePickerStart.Date < this.DatePickerEnd.Date && !this.TextBoxDuration.Text.Equals(string.Empty) && this.ComboBoxAssetType.SelectedValue != null)
             {
-                Asset a = new Asset();
+                Asset a = this.AssetToUpdate;
                 a.Name = this.TextBoxName.Text;
                 a.Uri = this.TextBoxUrl.Text;
-                a.Mimetype = this.ComboBoxAssetType.SelectedValue as string;
                 a.StartDate = (this.DatePickerStart.Date.Date + this.TimePickerStart.Time).ToUniversalTime();
                 a.EndDate = (this.DatePickerEnd.Date.Date + this.TimePickerEnd.Time).ToUniversalTime();
                 a.Duration = this.TextBoxDuration.Text;
@@ -70,15 +91,32 @@ namespace ScreenlyManager
                 a.NoCache = this.ToggleSwitchDisableCache.IsOn ? "1" : "0";
                 a.Mimetype = this.ComboBoxAssetType.SelectedValue as string;
 
-                var devicesSelected = this.GridViewDevices.SelectedItems.ToList();
-                foreach (var device in devicesSelected)
-                    await (device as Device).CreateAsset(a);
-
                 var dialog = new MessageDialog(this.Loader.GetString("ConfirmationAddAsset"));
+
+                if (this.IsAnUpdate)
+                {
+                    await this.DeviceToUpdate.UpdateAssetAsync(a);
+                    dialog.Content = this.Loader.GetString("ConfirmationUpdateAsset");
+                }
+                else
+                {
+                    if (this.GridViewDevices.SelectedItems.Count > 0)
+                    {
+                        var devicesSelected = this.GridViewDevices.SelectedItems.ToList();
+                        foreach (var device in devicesSelected)
+                            await (device as Device).CreateAsset(a);
+                    }
+                    else
+                    {
+                        var dialogError = new MessageDialog(this.Loader.GetString("RequiredAssetFileds"));
+                        dialogError.Commands.Add(new UICommand("Ok") { Id = 0 });
+                        dialogError.DefaultCommandIndex = 0;
+                        await dialogError.ShowAsync();
+                    }
+                }
                 dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
                 dialog.DefaultCommandIndex = 0;
                 var result = await dialog.ShowAsync();
-
                 this.Frame.Navigate(typeof(MainPage), null);
             }
             else
