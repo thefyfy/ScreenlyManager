@@ -20,11 +20,7 @@
                 <TextBlock x:Uid="AddAssetUrl" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <TextBox x:Uid="AddAssetUrlTextBox" x:Name="TextBoxUrl" Margin="20,2" MaxLength="30" PlaceholderText="" />
                 <TextBlock x:Uid="AddAssetType" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-                <ComboBox x:Name="ListBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch">
-                    <ComboBoxItem x:Uid="AddAssetImage" Content=""/>
-                    <ComboBoxItem x:Uid="AddAssetVideo" Content="" />
-                    <ComboBoxItem IsSelected="True" x:Uid="AddAssetWebpage" Content="" />
-                </ComboBox>
+                <ComboBox x:Name="ComboBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch" ItemsSource="{x:Bind MimeTypes}" DisplayMemberPath="Item2" SelectedValuePath="Item1" Loaded="ComboBoxAssetType_Loaded"/>
                 <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <RelativePanel Margin="20, 2">
                     <DatePicker x:Name="DatePickerStart" />
@@ -37,10 +33,12 @@
                 </RelativePanel>
                 <TextBlock x:Uid="AddAssetDuration" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <TextBox x:Uid="AddAssetDurationTextBox" x:Name="TextBoxDuration" Margin="20,2"  MaxLength="30" PlaceholderText="" InputScope="Number"/>
+                <TextBlock x:Uid="AddAssetEnable" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <ToggleSwitch x:Uid="AddAssetToggle" x:Name="ToggleSwitchEnable" HorizontalAlignment="Left" Margin="20, 2" OnContent="" OffContent=""/>
                 <TextBlock x:Uid="AddAssetCache" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-                <ToggleSwitch x:Uid="AddAssetCacheToggle" x:Name="ToggleSwitchDisableCache" HorizontalAlignment="Left" Margin="20, 2" OnContent="" OffContent=""/>
+                <ToggleSwitch x:Uid="AddAssetToggle" x:Name="ToggleSwitchDisableCache" HorizontalAlignment="Left" Margin="20, 2" OnContent="" OffContent=""/>
 
-                <TextBlock x:Uid="AddAssetDevice" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
+                <TextBlock x:Uid="AddAssetDevice" x:Name="TextBlockDevice" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <GridView x:Name="GridViewDevices" SelectionMode="Multiple" Margin="20,2">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="local:Device">

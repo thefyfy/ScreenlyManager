@@ -125,14 +125,6 @@
     <value>Désactiver le cache</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
-  <data name="AddAssetCacheToggle.OffContent" xml:space="preserve">
-    <value>Non</value>
-    <comment>AddOrChangeAssetPage.xaml</comment>
-  </data>
-  <data name="AddAssetCacheToggle.OnContent" xml:space="preserve">
-    <value>Oui</value>
-    <comment>AddOrChangeAssetPage.xaml</comment>
-  </data>
   <data name="AddAssetCancel.Content" xml:space="preserve">
     <value>Annuler</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
@@ -149,12 +141,12 @@
     <value>60 secondes</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
-  <data name="AddAssetEndDate.Text" xml:space="preserve">
-    <value>Date de fin de diffusion</value>
+  <data name="AddAssetEnable.Text" xml:space="preserve">
+    <value>Activer après ajout ?</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
-  <data name="AddAssetImage.Content" xml:space="preserve">
-    <value>Image</value>
+  <data name="AddAssetEndDate.Text" xml:space="preserve">
+    <value>Date de fin de diffusion</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="AddAssetName.Text" xml:space="preserve">
@@ -177,6 +169,14 @@
     <value>Ajouter un nouvel écran</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
+  <data name="AddAssetToggle.OffContent" xml:space="preserve">
+    <value>Non</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetToggle.OnContent" xml:space="preserve">
+    <value>Oui</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
   <data name="AddAssetType.Text" xml:space="preserve">
     <value>Type d'affichage</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
@@ -187,14 +187,6 @@
   </data>
   <data name="AddAssetUrlTextBox.PlaceholderText" xml:space="preserve">
     <value>Exemple : https://www.screenly.io/</value>
-    <comment>AddOrChangeAssetPage.xaml</comment>
-  </data>
-  <data name="AddAssetVideo.Content" xml:space="preserve">
-    <value>Vidéo</value>
-    <comment>AddOrChangeAssetPage.xaml</comment>
-  </data>
-  <data name="AddAssetWebpage.Content" xml:space="preserve">
-    <value>Page web</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="AddDeviceCancel.Content" xml:space="preserve">
@@ -253,6 +245,10 @@
     <value>Configuration importée depuis le fichier </value>
     <comment>MainPage.xaml</comment>
   </data>
+  <data name="ConfirmationAddAsset" xml:space="preserve">
+    <value>Votre nouvel affichage vient d'être déployé sur les écrans précédemment sélectionnés</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
   <data name="ConfirmationAddDevice" xml:space="preserve">
     <value>Le nouvel appareil a été ajouté</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
@@ -288,6 +284,10 @@
   <data name="ErrorCannotSaveFile" xml:space="preserve">
     <value>Oups... Le fichier {0} n'a pas pu être enregistré</value>
     <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="ImportCompleted" xml:space="preserve">
     <value>Import réussi</value>
@@ -345,6 +345,10 @@
     <value>Non</value>
     <comment>MainPage.xaml</comment>
   </data>
+  <data name="RequiredAssetFileds" xml:space="preserve">
+    <value>Oups... Vous devez au minimum sélectioner un appareil et remplir les champs suivants : "Nom", "URL", "Date de début", "Date de fin" et "Durée"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
   <data name="RequiredFileds" xml:space="preserve">
     <value>Oups... Vous devez au minimum remplir les champs suivants : "Nom", "Adresse IP" et "Port"</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
@@ -352,6 +356,14 @@
   <data name="ScheduleOverview" xml:space="preserve">
     <value>Aperçu du calendrier</value>
     <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>Vidéo</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="Webpage" xml:space="preserve">
+    <value>Page web</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Oui</value>

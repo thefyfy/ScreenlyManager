@@ -141,12 +141,12 @@
     <value>60 seconds</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
-  <data name="AddAssetEndDate.Text" xml:space="preserve">
-    <value>End date</value>
+  <data name="AddAssetEnable.Text" xml:space="preserve">
+    <value>Enable asset after adding?</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
-  <data name="AddAssetImage.Content" xml:space="preserve">
-    <value>Image</value>
+  <data name="AddAssetEndDate.Text" xml:space="preserve">
+    <value>End date</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="AddAssetName.Text" xml:space="preserve">
@@ -169,6 +169,14 @@
     <value>Add new asset</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
+  <data name="AddAssetToggle.OffContent" xml:space="preserve">
+    <value>No</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetToggle.OnContent" xml:space="preserve">
+    <value>Yes</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
   <data name="AddAssetType.Text" xml:space="preserve">
     <value>Asset type</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
@@ -179,14 +187,6 @@
   </data>
   <data name="AddAssetUrlTextBox.PlaceholderText" xml:space="preserve">
     <value>e.g. https://www.screenly.io/</value>
-    <comment>AddOrChangeAssetPage.xaml</comment>
-  </data>
-  <data name="AddAssetVideo.Content" xml:space="preserve">
-    <value>Video</value>
-    <comment>AddOrChangeAssetPage.xaml</comment>
-  </data>
-  <data name="AddAssetWebpage.Content" xml:space="preserve">
-    <value>Webpage</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="AddDeviceCancel.Content" xml:space="preserve">
@@ -245,6 +245,10 @@
     <value>Configuration imported from </value>
     <comment>MainPage.xaml</comment>
   </data>
+  <data name="ConfirmationAddAsset" xml:space="preserve">
+    <value>Your new display has just been deployed on previously selected screens</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
   <data name="ConfirmationAddDevice" xml:space="preserve">
     <value>The new device has been added</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
@@ -280,6 +284,10 @@
   <data name="ErrorCannotSaveFile" xml:space="preserve">
     <value>Oops... File {0} couldn't be saved.</value>
     <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="ImportCompleted" xml:space="preserve">
     <value>Import completed</value>
@@ -337,6 +345,10 @@
     <value>No</value>
     <comment>MainPage.xaml</comment>
   </data>
+  <data name="RequiredAssetFileds" xml:space="preserve">
+    <value>Oops ... You must at least select a device and fill in the following fields: "Name", "URL", "Start date", "End date" and "Duration"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
   <data name="RequiredFileds" xml:space="preserve">
     <value>Oops... You have to fill at least this fields : \"Name\", \"IP Address\" and \"Port\"</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
@@ -344,6 +356,14 @@
   <data name="ScheduleOverview" xml:space="preserve">
     <value>Schedule Overview</value>
     <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>Video</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="Webpage" xml:space="preserve">
+    <value>Webpage</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

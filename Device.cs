@@ -236,88 +236,55 @@ namespace ScreenlyManager
             }
         }
 
-        //public Asset CreateAsset(Device d, Asset a)
-        //{
-        //    Asset returnedAsset = new Asset();
-        //    JsonSerializerSettings settings = new JsonSerializerSettings();
-        //    IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
-        //    {
-        //        DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
-        //    };
-        //    settings.Converters.Add(dateConverter);
+        /// <summary>
+        /// Create new asset on Raspberry using API
+        /// </summary>
+        /// <param name="a">New asset to create on Raspberry</param>
+        /// <returns></returns>
+        public async Task CreateAsset(Asset a)
+        {
+            Asset returnedAsset = new Asset();
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
+            {
+                DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
+            };
+            settings.Converters.Add(dateConverter);
 
-        //    string json = JsonConvert.SerializeObject(a, settings);
-        //    var postData = "model=" + json;
-        //    var data = Encoding.UTF8.GetBytes(postData);
+            string json = JsonConvert.SerializeObject(a, settings);
+            var postData = "model=" + json;
+            var data = System.Text.Encoding.UTF8.GetBytes(postData);
 
-        //    string resultJson = string.Empty;
-        //    string parameters = "/api/assets";
+            string resultJson = string.Empty;
+            string parameters = "/api/assets";
 
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-        //        request.Method = "POST";
-        //        request.ContentType = "application/x-www-form-urlencoded";
-        //        request.ContentLength = data.Length;
-        //        Stream dataStream = request.GetRequestStream();
-        //        dataStream.Write(data, 0, data.Length);
-        //        dataStream.Close();
+            try
+            {
+                HttpClient client = new HttpClient();
+                HttpContent content = new ByteArrayContent(data, 0, data.Length);
+                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
 
-        //        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-        //        {
-        //            Stream dataResponseStream = response.GetResponseStream();
-        //            StreamReader reader = new StreamReader(dataResponseStream);
-        //            resultJson = reader.ReadToEnd();
-        //            reader.Close();
-        //            dataResponseStream.Close();
-        //        }
+                using (HttpResponseMessage response = await client.PostAsync(this.HttpLink + parameters, content))
+                {
+                    resultJson = await response.Content.ReadAsStringAsync();
+                }
 
-        //        if (!resultJson.Equals(string.Empty))
-        //            returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Error while creating asset.", ex);
-        //    }
-        //    return returnedAsset;
-        //}
-
-        //public Asset GetAsset(Device d, string assetId)
-        //{
-        //    Asset returnedAsset = new Asset();
-        //    JsonSerializerSettings settings = new JsonSerializerSettings();
-        //    IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
-        //    {
-        //        DateTimeFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.fff'Z'"
-        //    };
-        //    settings.Converters.Add(dateConverter);
-
-        //    string resultJson = string.Empty;
-        //    string parameters = "/api/assets/" + assetId;
-
-        //    try
-        //    {
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(d.HttpLink + parameters);
-        //        request.Method = "GET";
-        //        using (HttpWebResponse response = (HttpWebResponse)request.())
-        //        {
-        //            Stream dataStream = response.GetResponseStream();
-        //            StreamReader reader = new StreamReader(dataStream);
-        //            resultJson = reader.ReadToEnd();
-        //            reader.Close();
-        //            dataStream.Close();
-        //        }
-
-        //        if (!resultJson.Equals(string.Empty))
-        //            returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(string.Format("Error while getting asset {0}", assetId), ex);
-        //    }
-
-        //    return returnedAsset;
-        //}
+                if (!resultJson.Equals(string.Empty))
+                    returnedAsset = JsonConvert.DeserializeObject<Asset>(resultJson, settings);
+            }
+            catch (WebException ex)
+            {
+                using (var stream = ex.Response.GetResponseStream())
+                using (var reader = new StreamReader(stream))
+                {
+                    throw new Exception(reader.ReadToEnd(), ex);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while creating asset.", ex);
+            }
+        }
 
         #endregion
     }
