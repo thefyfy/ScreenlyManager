@@ -105,7 +105,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Asset.cs" />
-    <Compile Include="XamlConverters.cs" />
+    <Compile Include="Converters\StatusConverter.cs" />
+    <Compile Include="Converters\MimeTypeConverter.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

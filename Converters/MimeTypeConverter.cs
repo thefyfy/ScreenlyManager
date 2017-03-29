@@ -1,17 +1,13 @@
 ﻿using System;
-using Windows.UI;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Media;
 
-namespace ScreenlyManager
+namespace ScreenlyManager.Converters
 {
-    public class XamlConverters : IValueConverter
+    public class MimeTypeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is bool)
-                return ((bool)value) ? new SolidColorBrush(Colors.Green) : new SolidColorBrush(Colors.Red);
-            else if (value is string)
+            if (value is string)
             {
                 switch ((string) value)
                 {

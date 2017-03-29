@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -34,16 +35,19 @@ namespace ScreenlyManager
 
             // AppData folder access
             var localFolder = ApplicationData.Current.LocalFolder;
+            this.PathDbFile = localFolder.Path + Path.DirectorySeparatorChar + DB_FILE;
 
             // Load user config or create db file (if not exists) (containing IPs and informations about RPi)
-            if (!File.Exists(localFolder.Path + Path.DirectorySeparatorChar + DB_FILE))
-                File.Create(localFolder.Path + Path.DirectorySeparatorChar + DB_FILE);
+            if (!File.Exists(this.PathDbFile))
+            {
+                var file = File.Create(this.PathDbFile);
+                file.Dispose();
+            }
             else
             {
-                this.PathDbFile = localFolder.Path + Path.DirectorySeparatorChar + DB_FILE;
+                this.ProgressRingLoadingDevice.IsActive = true;
                 this.LoadConfigurationAsync(this.PathDbFile);
             }
-            this.ProgressRingLoadingDevice.IsActive = true;
         }
 
         /// <summary>
@@ -56,15 +60,17 @@ namespace ScreenlyManager
             string json = await FileIO.ReadTextAsync(file);
             this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
             // Need to get list of assets for each device
-            foreach (var device in this.Devices)
+            if (this.Devices != null)
             {
-                if(await device.IsReachable())
-                    await device.GetAssetsAsync();
+                foreach (var device in this.Devices)
+                {
+                    if (await device.IsReachable())
+                        await device.GetAssetsAsync();
+                }
+                this.AppBarButtonAddAsset.IsEnabled = true;
+                this.ListViewDevice.ItemsSource = this.Devices;
             }
-
             this.ProgressRingLoadingDevice.IsActive = false;
-            this.AppBarButtonAddAsset.IsEnabled = true;
-            this.ListViewDevice.ItemsSource = this.Devices;
         }
 
         /// <summary>
@@ -272,6 +278,7 @@ namespace ScreenlyManager
             {
                 CachedFileManager.DeferUpdates(file);
                 string content = await FileIO.ReadTextAsync(file, Windows.Storage.Streams.UnicodeEncoding.Utf8);
+                this.ProgressRingLoadingDevice.IsActive = true;
 
                 try
                 {
@@ -292,6 +299,7 @@ namespace ScreenlyManager
                     dialogError.Commands.Add(new UICommand("Ok") { Id = 0 });
                     dialogError.DefaultCommandIndex = 0;
                     await dialogError.ShowAsync();
+                    this.ProgressRingLoadingDevice.IsActive = false;
                 }
             }
         }

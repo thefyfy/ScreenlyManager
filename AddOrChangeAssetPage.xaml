@@ -24,7 +24,7 @@
                 <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <RelativePanel Margin="20, 2">
                     <DatePicker x:Name="DatePickerStart" />
-                    <TimePicker x:Name="TimePickerStart" RelativePanel.RightOf="DatePickerStart" Margin="20, 0, 0, 0" />
+                    <TimePicker x:Name="TimePickerStart" RelativePanel.RightOf="DatePickerStart" Margin="20,0,0,0" />
                 </RelativePanel>
                 <TextBlock x:Uid="AddAssetEndDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <RelativePanel Margin="20, 2">
@@ -67,5 +67,31 @@
 
             </StackPanel>
         </ScrollViewer>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="296" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TimePickerStart.(RelativePanel.Below)"   Value="DatePickerStart" />
+                        <Setter Target="TimePickerStart.(RelativePanel.AlignLeftWith)"   Value="DatePickerStart" />
+                        <Setter Target="TimePickerStart.(Margin)"   Value="20,10,0,0" />
+                        <Setter Target="TimePickerEnd.(RelativePanel.Below)"   Value="DatePickerEnd" />
+                        <Setter Target="TimePickerEnd.(RelativePanel.AlignLeftWith)"   Value="DatePickerEnd" />
+                        <Setter Target="TimePickerEnd.(Margin)"   Value="20,10,0,0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="TimePickerStart.(RelativePanel.RightOf)" Value="DatePickerStart" />
+                        <Setter Target="TimePickerEnd.(RelativePanel.RightOf)" Value="DatePickerEnd" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
     </Grid>
 </Page>
