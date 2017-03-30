@@ -377,4 +377,16 @@
     <value>Edit asset "{0}" on "{1}"</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
+  <data name="MainPageMenuFlyoutEdit.Text" xml:space="preserve">
+    <value>Edit</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutOpen.Text" xml:space="preserve">
+    <value>Open in browser</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutRemove.Text" xml:space="preserve">
+    <value>Remove</value>
+    <comment>MainPage.xaml</comment>
+  </data>
 </root>

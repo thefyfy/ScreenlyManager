@@ -378,6 +378,17 @@ namespace ScreenlyManager
             this.Frame.Navigate(typeof(AddOrChangeDevicePage), this.CurrentRightClickDevice);
         }
 
+        /// <summary>
+        /// Open the configuration device link
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void MenuFlyoutItemOpenDevice_Click(object sender, RoutedEventArgs e)
+        {
+            if (Uri.TryCreate(this.CurrentRightClickDevice.HttpLink, System.UriKind.Absolute, out Uri uriResult))
+                await Windows.System.Launcher.LaunchUriAsync(uriResult);
+        }
+
         #endregion
     }
 }

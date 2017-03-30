@@ -377,4 +377,16 @@
     <value>Modifier l'affichage "{0}" sur "{1}"</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
+  <data name="MainPageMenuFlyoutEdit.Text" xml:space="preserve">
+    <value>Modifier</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutOpen.Text" xml:space="preserve">
+    <value>Ouvrir dans le navigateur</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutRemove.Text" xml:space="preserve">
+    <value>Supprimer</value>
+    <comment>MainPage.xaml</comment>
+  </data>
 </root>

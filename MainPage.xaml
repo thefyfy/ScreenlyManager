@@ -59,8 +59,9 @@
                         <ListView.Resources>
                             <MenuFlyout x:Name="MenuFlyoutDevice">
                                 <MenuFlyout.Items>
-                                    <MenuFlyoutItem x:Name="MenuFlyoutItemEditDevice"  Text="Edit" Click="MenuFlyoutItemEditDevice_Click" />
-                                    <MenuFlyoutItem x:Name="MenuFlyoutItemRemoveDevice" Text="Remove" Click="MenuFlyoutItemRemoveDevice_Click" />
+                                    <MenuFlyoutItem x:Uid="MainPageMenuFlyoutEdit" x:Name="MenuFlyoutItemEditDevice"  Text="Edit" Click="MenuFlyoutItemEditDevice_Click" />
+                                    <MenuFlyoutItem x:Uid="MainPageMenuFlyoutRemove" x:Name="MenuFlyoutItemRemoveDevice" Text="Remove" Click="MenuFlyoutItemRemoveDevice_Click" />
+                                    <MenuFlyoutItem x:Uid="MainPageMenuFlyoutOpen" x:Name="MenuFlyoutItemOpenDevice" Text="Open on browser" Click="MenuFlyoutItemOpenDevice_Click" />
                                 </MenuFlyout.Items>
                             </MenuFlyout>
                         </ListView.Resources>
