@@ -18,7 +18,7 @@
                 <TextBlock x:Uid="AddAssetName" Text="" HorizontalAlignment="Left" Margin="20, 2"/>
                 <TextBox x:Uid="AddAssetNameTextBox" x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="" />
                 <TextBlock x:Uid="AddAssetUrl" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-                <TextBox x:Uid="AddAssetUrlTextBox" x:Name="TextBoxUrl" Margin="20,2" MaxLength="30" PlaceholderText="" />
+                <TextBox x:Uid="AddAssetUrlTextBox" x:Name="TextBoxUrl" Margin="20,2" PlaceholderText="" />
                 <TextBlock x:Uid="AddAssetType" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <ComboBox x:Name="ComboBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch" ItemsSource="{x:Bind MimeTypes}" DisplayMemberPath="Item2" SelectedValuePath="Item1" Loaded="ComboBoxAssetType_Loaded"/>
                 <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
