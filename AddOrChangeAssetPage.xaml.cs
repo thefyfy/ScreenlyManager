@@ -79,7 +79,7 @@ namespace ScreenlyManager
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (!this.TextBoxName.Text.Equals(string.Empty) && !this.TextBoxUrl.Text.Equals(string.Empty) && this.DatePickerStart.Date < this.DatePickerEnd.Date && !this.TextBoxDuration.Text.Equals(string.Empty) && this.ComboBoxAssetType.SelectedValue != null)
+            if (!this.TextBoxName.Text.Equals(string.Empty) && !this.TextBoxUrl.Text.Equals(string.Empty) && (this.DatePickerStart.Date.Date + this.TimePickerStart.Time) < (this.DatePickerEnd.Date.Date + this.TimePickerEnd.Time) && !this.TextBoxDuration.Text.Equals(string.Empty) && this.ComboBoxAssetType.SelectedValue != null)
             {
                 Asset a = this.AssetToUpdate;
                 a.Name = this.TextBoxName.Text;
@@ -139,6 +139,11 @@ namespace ScreenlyManager
         private void ComboBoxAssetType_Loaded(object sender, RoutedEventArgs e)
         {
             this.ComboBoxAssetType.SelectedIndex = 0;
+        }
+
+        private void DatePickerStart_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        {
+            this.DatePickerEnd.Date = this.DatePickerStart.Date.AddDays(1);
         }
     }
 }

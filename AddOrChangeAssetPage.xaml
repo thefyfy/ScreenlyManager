@@ -23,7 +23,7 @@
                 <ComboBox x:Name="ComboBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch" ItemsSource="{x:Bind MimeTypes}" DisplayMemberPath="Item2" SelectedValuePath="Item1" Loaded="ComboBoxAssetType_Loaded"/>
                 <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <RelativePanel Margin="20, 2">
-                    <DatePicker x:Name="DatePickerStart" />
+                    <DatePicker x:Name="DatePickerStart" DateChanged="DatePickerStart_DateChanged" />
                     <TimePicker x:Name="TimePickerStart" RelativePanel.RightOf="DatePickerStart" Margin="20,0,0,0" />
                 </RelativePanel>
                 <TextBlock x:Uid="AddAssetEndDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
