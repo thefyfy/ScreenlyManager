@@ -225,6 +225,8 @@ namespace ScreenlyManager
                 // Don't know why, but toggled event is fired when dragging item in listview (and IsOn value's keep unchanged!), so I found this work around...
                 if ((currentAsset.IsEnabled.Equals("1") ? true : false) != newState)
                 {
+                    currentAsset.StartDate = currentAsset.StartDate.ToUniversalTime();
+                    currentAsset.EndDate = currentAsset.EndDate.ToUniversalTime();
                     currentAsset.IsEnabled = (sender as ToggleSwitch).IsOn ? "1" : "0";
                     await this.CurrentDevice.UpdateAssetAsync(currentAsset);
                     this.RefreshAssetsForCurrentDeviceAsync();
