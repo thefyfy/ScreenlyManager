@@ -49,12 +49,15 @@ namespace ScreenlyManager
         [Newtonsoft.Json.JsonProperty(PropertyName = "location")]
         public string Location { get; set; }
 
+        [Newtonsoft.Json.JsonProperty(PropertyName = "api_version")]
+        public string ApiVersion { get; set; }
+
         [Newtonsoft.Json.JsonIgnore]
         public string HttpLink
         {
             get
             {
-                return "http://" + IpAddress + ":" + Port;
+                return $"http://{IpAddress}:{Port}";
             }
         }
 
@@ -101,7 +104,7 @@ namespace ScreenlyManager
         {
             List<Asset> returnedAssets = new List<Asset>();
             string resultJson = string.Empty;
-            string parameters = "/api/assets";
+            string parameters = $"/api/{this.ApiVersion}assets";
 
             try
             {
@@ -128,7 +131,7 @@ namespace ScreenlyManager
         public async Task<bool> RemoveAssetAsync(string assetId)
         {
             string resultJson = string.Empty;
-            string parameters = "/api/assets/" + assetId;
+            string parameters = $"/api/{this.ApiVersion}assets/{assetId}";
 
             try
             {
@@ -162,11 +165,11 @@ namespace ScreenlyManager
             settings.Converters.Add(dateConverter);
 
             string json = JsonConvert.SerializeObject(a, settings);
-            var postData = "model=" + json;
+            var postData = $"model={json}";
             var data = System.Text.Encoding.UTF8.GetBytes(postData);
 
             string resultJson = string.Empty;
-            string parameters = "/api/assets/" + a.AssetId;
+            string parameters = $"/api/{this.ApiVersion}assets/{a.AssetId}";
 
             try
             {
@@ -206,11 +209,11 @@ namespace ScreenlyManager
         /// <returns></returns>
         public async Task UpdateOrderAssetsAsync(string newOrder)
         {
-            var postData = "ids=" + newOrder;
+            var postData = $"ids={newOrder}";
             var data = System.Text.Encoding.UTF8.GetBytes(postData);
 
             string resultJson = string.Empty;
-            string parameters = "/api/assets/order";
+            string parameters = $"/api/{this.ApiVersion}assets/order";
 
             try
             {
@@ -252,11 +255,11 @@ namespace ScreenlyManager
             settings.Converters.Add(dateConverter);
 
             string json = JsonConvert.SerializeObject(a, settings);
-            var postData = "model=" + json;
+            var postData = $"model={json}";
             var data = System.Text.Encoding.UTF8.GetBytes(postData);
 
             string resultJson = string.Empty;
-            string parameters = "/api/assets";
+            string parameters = $"/api/{this.ApiVersion}assets";
 
             try
             {
@@ -302,7 +305,7 @@ namespace ScreenlyManager
             settings.Converters.Add(dateConverter);
 
             string resultJson = string.Empty;
-            string parameters = "/api/assets/" + assetId;
+            string parameters = $"/api/{this.ApiVersion}assets/{assetId}";
 
             try
             {
