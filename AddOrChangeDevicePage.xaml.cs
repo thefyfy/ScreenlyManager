@@ -51,6 +51,7 @@ namespace ScreenlyManager
                 this.TextBoxLocation.Text = this.ExistingDevice.Location;
                 this.TextBoxIp.Text = this.ExistingDevice.IpAddress;
                 this.TextBoxPort.Text = this.ExistingDevice.Port;
+                this.TextBoxApi.Text = this.ExistingDevice.ApiVersion;
                 this.TextBlockTitle.Text = $"{ this.Loader.GetString("EditDevice") } \"{ this.ExistingDevice.Name }\"";
             }
         }
@@ -71,6 +72,7 @@ namespace ScreenlyManager
                 newDevice.Location = this.TextBoxLocation.Text;
                 newDevice.IpAddress = this.TextBoxIp.Text;
                 newDevice.Port = this.TextBoxPort.Text;
+                newDevice.ApiVersion = this.TextBoxApi.Text;
                 this.Devices.Add(newDevice);
 
                 var dbContent = JsonConvert.SerializeObject(this.Devices);

@@ -389,4 +389,12 @@
     <value>Supprimer</value>
     <comment>MainPage.xaml</comment>
   </data>
+  <data name="AddDeviceApi.Text" xml:space="preserve">
+    <value>Version de l'API</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceApiTextBox.PlaceholderText" xml:space="preserve">
+    <value>v1/</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
 </root>
