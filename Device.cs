@@ -176,7 +176,7 @@ namespace ScreenlyManager
                 HttpClient client = new HttpClient();
                 HttpContent content = new ByteArrayContent(data, 0, data.Length);
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                using (HttpResponseMessage response = await client.PostAsync(this.HttpLink + parameters, content))
+                using (HttpResponseMessage response = await client.PutAsync(this.HttpLink + parameters, content))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
