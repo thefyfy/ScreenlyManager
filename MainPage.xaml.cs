@@ -173,10 +173,21 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void ButtonPreview_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void ButtonPreview_Click(object sender, RoutedEventArgs e)
         {
             if (Uri.TryCreate(((sender as Button).Tag.ToString()), System.UriKind.Absolute, out Uri uriResult))
                 await Windows.System.Launcher.LaunchUriAsync(uriResult);
+        }
+
+        /// <summary>
+        /// Duplicate selected asset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonDuplicate_Click(object sender, RoutedEventArgs e)
+        {
+            var assetId = (sender as Button).Tag.ToString();
+            this.Frame.Navigate(typeof(AddOrChangeAssetPage), new Tuple<List<Device>, Device, string>(this.Devices, this.CurrentDevice, assetId));
         }
 
         /// <summary>

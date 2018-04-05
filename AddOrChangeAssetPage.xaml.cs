@@ -75,6 +75,31 @@ namespace ScreenlyManager
 
                 this.TextBlockTitle.Text = string.Format(this.Loader.GetString("EditAsset"), this.AssetToUpdate.Name, this.DeviceToUpdate.Name);
             }
+            else if (e.Parameter != null && e.Parameter is Tuple<List<Device>, Device, string>)
+            {
+                this.GridViewDevices.Visibility = Visibility.Visible;
+                this.TextBlockDevice.Visibility = Visibility.Visible;
+                this.IsAnUpdate = false;
+                this.Devices = (e.Parameter as Tuple<List<Device>, Device, string>).Item1;
+                this.GridViewDevices.ItemsSource = this.Devices.Where(x => x.IsUp);
+                Device deviceToCopy = (e.Parameter as Tuple<List<Device>, Device, string>).Item2;
+                string assetIdToUpdate = (e.Parameter as Tuple<List<Device>, Device, string>).Item3;
+
+                this.AssetToUpdate = await deviceToCopy.GetAssetAsync(assetIdToUpdate);
+
+                this.TextBoxName.Text = this.AssetToUpdate.Name;
+                this.TextBoxUrl.Text = this.AssetToUpdate.ReadableUri;
+                this.ComboBoxAssetType.SelectedItem = this.MimeTypes.Where(x => x.Item1.Equals(this.AssetToUpdate.Mimetype)).FirstOrDefault();
+                this.DatePickerStart.Date = this.AssetToUpdate.StartDate;
+                this.TimePickerStart.Time = this.AssetToUpdate.StartDate.TimeOfDay;
+                this.DatePickerEnd.Date = this.AssetToUpdate.EndDate;
+                this.TimePickerEnd.Time = this.AssetToUpdate.EndDate.TimeOfDay;
+                this.TextBoxDuration.Text = this.AssetToUpdate.Duration;
+                this.ToggleSwitchEnable.IsOn = this.AssetToUpdate.IsEnabled.Equals("1") ? true : false;
+                this.ToggleSwitchDisableCache.IsOn = this.AssetToUpdate.NoCache.Equals("1") ? true : false;
+
+                this.TextBlockTitle.Text = string.Format(this.Loader.GetString("DuplicateAsset"), this.AssetToUpdate.Name);
+            }
         }
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)

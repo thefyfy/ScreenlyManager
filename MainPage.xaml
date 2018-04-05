@@ -43,7 +43,7 @@
 
                                     <Image Grid.RowSpan="2" Grid.Column="0" Source="Assets/raspberry-36.png" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="None"/>
                                     <TextBlock Text="{x:Bind Name}" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" FontSize="20"/>
-                                    <TextBlock Text="{x:Bind Location}" Grid.Column="1" Grid.Row="1" FontSize="11" />
+                                    <TextBlock Text="{x:Bind Location}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" FontSize="11" />
                                     <TextBlock Text="{x:Bind IpAddress}" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2" FontSize="11" HorizontalAlignment="Right"/>
                                     <Ellipse Grid.Column="3" Grid.Row="0" Fill="{x:Bind IsUp, Converter={StaticResource ColorConverter}}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="12" Width="12"/>
 
@@ -97,6 +97,7 @@
                                             <ColumnDefinition Width="72" />
                                             <ColumnDefinition Width="72" />
                                             <ColumnDefinition Width="72" />
+                                            <ColumnDefinition Width="72" />
                                             <ColumnDefinition Width="108" />
                                         </Grid.ColumnDefinitions>
 
@@ -108,7 +109,8 @@
                                         <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreview_Click" Tag="{x:Bind ReadableUri}"/>
                                         <Button x:Name="ButtonEdit" Content="&#xE1C2;" FontFamily="Segoe MDL2 Assets" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonEdit_Click" Tag="{x:Bind AssetId}"/>
                                         <Button x:Name="ButtonRemove" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonRemove_Click" Tag="{x:Bind AssetId}"/>
-                                        <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0" Toggled="ToggleSwitchEnable_Toggled"/>
+                                        <Button x:Name="ButtonDuplicate" Content="&#xE8C8;" FontFamily="Segoe MDL2 Assets" Grid.Column="8" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonDuplicate_Click" Tag="{x:Bind AssetId}"/>
+                                        <ToggleSwitch Grid.Column="9" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0" Toggled="ToggleSwitchEnable_Toggled"/>
 
                                     </Grid>
                                 </DataTemplate>
@@ -138,6 +140,7 @@
                                             <ColumnDefinition Width="72" />
                                             <ColumnDefinition Width="72" />
                                             <ColumnDefinition Width="72" />
+                                            <ColumnDefinition Width="72" />
                                             <ColumnDefinition Width="108" />
                                         </Grid.ColumnDefinitions>
 
@@ -148,7 +151,8 @@
                                         <Button x:Name="ButtonPreview" Content="&#xE8A1;" FontFamily="Segoe MDL2 Assets" Grid.Column="5" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonPreview_Click" Tag="{x:Bind ReadableUri}"/>
                                         <Button x:Name="ButtonChange" Content="&#xE1C2;" FontFamily="Segoe MDL2 Assets" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonEdit_Click" Tag="{x:Bind AssetId}"/>
                                         <Button x:Name="ButtonRemove" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Grid.Column="7" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonRemove_Click" Tag="{x:Bind AssetId}"/>
-                                        <ToggleSwitch Grid.Column="8" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0" Toggled="ToggleSwitchEnable_Toggled"/>
+                                        <Button x:Name="ButtonDuplicate" Content="&#xE8C8;" FontFamily="Segoe MDL2 Assets" Grid.Column="8" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="5,0" FontSize="20" Height="36" Click="ButtonDuplicate_Click" Tag="{x:Bind AssetId}"/>
+                                        <ToggleSwitch Grid.Column="9" x:Name="ToggleSwitchEnable" IsOn="{x:Bind IsEnabledSwitch}" OnContent="On" OffContent="Off" Padding="5,0" Toggled="ToggleSwitchEnable_Toggled"/>
 
                                     </Grid>
                                 </DataTemplate>

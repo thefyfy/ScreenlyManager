@@ -397,4 +397,8 @@
     <value>v1/</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
   </data>
+  <data name="DuplicateAsset" xml:space="preserve">
+    <value>Duplicate asset "{0}"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
 </root>
