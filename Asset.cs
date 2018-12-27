@@ -21,22 +21,28 @@ namespace ScreenlyManager
         public DateTime EndDate { get; set; }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "is_enabled")]
-        public string IsEnabled { get; set; }
+        public Int32 IsEnabled { get; set; }
+
+        [Newtonsoft.Json.JsonProperty(PropertyName = "is_processing")]
+        public Int32? IsProcessing { get; set; }
+
+        [Newtonsoft.Json.JsonProperty(PropertyName = "skip_asset_check")]
+        public Int32 SkipAssetCheck { get; set; }
 
         [Newtonsoft.Json.JsonIgnore]
         public bool IsEnabledSwitch
         {
             get
             {
-                return IsEnabled.Equals("1") ? true : false;
+                return IsEnabled.Equals(1) ? true : false;
             }
         }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "nocache")]
-        public string NoCache { get; set; }
+        public Int32 NoCache { get; set; }
 
         [Newtonsoft.Json.JsonProperty(PropertyName = "is_active")]
-        public Boolean IsActive { get; set; }
+        public Int32 IsActive { get; set; }
 
         private string _Uri;
 

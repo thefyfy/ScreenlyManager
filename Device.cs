@@ -24,7 +24,7 @@ namespace ScreenlyManager
         {
             get
             {
-                return new ObservableCollection<Asset>(this.Assets.FindAll(x => x.IsActive));
+                return new ObservableCollection<Asset>(this.Assets.FindAll(x => x.IsActive.Equals(1)));
             }
         }
 
@@ -33,7 +33,7 @@ namespace ScreenlyManager
         {
             get
             {
-                return new ObservableCollection<Asset>(this.Assets.FindAll(x => !x.IsActive));
+                return new ObservableCollection<Asset>(this.Assets.FindAll(x => x.IsActive.Equals(0)));
             }
         }
 

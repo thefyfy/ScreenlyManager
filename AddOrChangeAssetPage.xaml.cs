@@ -112,9 +112,11 @@ namespace ScreenlyManager
                 a.StartDate = (this.DatePickerStart.Date.Date + this.TimePickerStart.Time).ToUniversalTime();
                 a.EndDate = (this.DatePickerEnd.Date.Date + this.TimePickerEnd.Time).ToUniversalTime();
                 a.Duration = this.TextBoxDuration.Text;
-                a.IsEnabled = this.ToggleSwitchEnable.IsOn ? "1" : "0";
-                a.NoCache = this.ToggleSwitchDisableCache.IsOn ? "1" : "0";
+                a.IsEnabled = this.ToggleSwitchEnable.IsOn ? 1 : 0;
+                a.NoCache = this.ToggleSwitchDisableCache.IsOn ? 1 : 0;
                 a.Mimetype = this.ComboBoxAssetType.SelectedValue as string;
+                a.SkipAssetCheck = 1;
+                a.IsProcessing = 0;
 
                 var dialog = new MessageDialog(this.Loader.GetString("ConfirmationAddAsset"));
 

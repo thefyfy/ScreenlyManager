@@ -238,7 +238,7 @@ namespace ScreenlyManager
                 {
                     currentAsset.StartDate = currentAsset.StartDate.ToUniversalTime();
                     currentAsset.EndDate = currentAsset.EndDate.ToUniversalTime();
-                    currentAsset.IsEnabled = (sender as ToggleSwitch).IsOn ? "1" : "0";
+                    currentAsset.IsEnabled = (sender as ToggleSwitch).IsOn ? 1 : 0;
                     await this.CurrentDevice.UpdateAssetAsync(currentAsset);
                     this.RefreshAssetsForCurrentDeviceAsync();
                 }

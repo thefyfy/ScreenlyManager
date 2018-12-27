@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="bd4d638c-2e98-49e2-be8a-65be3fa9900d" Publisher="CN=j.filhoulaud" Version="1.0.11.0" />
+  <Identity Name="bd4d638c-2e98-49e2-be8a-65be3fa9900d" Publisher="CN=j.filhoulaud" Version="1.0.14.0" />
   <mp:PhoneIdentity PhoneProductId="bd4d638c-2e98-49e2-be8a-65be3fa9900d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>ScreenlyManager</DisplayName>
