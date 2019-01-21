@@ -41,7 +41,7 @@ namespace ScreenlyManager
         {
             StorageFile file = await StorageFile.GetFileFromPathAsync(this.PathDbFile);
             string json = await FileIO.ReadTextAsync(file);
-            this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
+            this.Devices = JsonConvert.DeserializeObject<List<Device>>(json) ?? new List<Device>();
 
             // Load device information into fields if Edit Mode
             if(e.Parameter != null && e.Parameter is Device)
@@ -67,12 +67,14 @@ namespace ScreenlyManager
                     this.Devices.Remove(deviceToDelete);
                 }
 
-                Device newDevice = new Device();
-                newDevice.Name = this.TextBoxName.Text;
-                newDevice.Location = this.TextBoxLocation.Text;
-                newDevice.IpAddress = this.TextBoxIp.Text;
-                newDevice.Port = this.TextBoxPort.Text;
-                newDevice.ApiVersion = this.TextBoxApi.Text;
+                Device newDevice = new Device
+                {
+                    Name = this.TextBoxName.Text,
+                    Location = this.TextBoxLocation.Text,
+                    IpAddress = this.TextBoxIp.Text,
+                    Port = this.TextBoxPort.Text,
+                    ApiVersion = this.TextBoxApi.Text
+                };
                 this.Devices.Add(newDevice);
 
                 var dbContent = JsonConvert.SerializeObject(this.Devices);

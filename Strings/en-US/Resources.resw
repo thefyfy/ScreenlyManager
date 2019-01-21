@@ -222,7 +222,7 @@
     <comment>AddOrChangeDevicePage.xaml</comment>
   </data>
   <data name="AddDevicePortTextBox.PlaceholderText" xml:space="preserve">
-    <value>Commonly 8080</value>
+    <value>Commonly 80</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
   </data>
   <data name="AddDeviceSubmit.Content" xml:space="preserve">
