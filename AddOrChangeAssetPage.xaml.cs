@@ -70,8 +70,8 @@ namespace ScreenlyManager
                 this.DatePickerEnd.Date = this.AssetToUpdate.EndDate;
                 this.TimePickerEnd.Time = this.AssetToUpdate.EndDate.TimeOfDay;
                 this.TextBoxDuration.Text = this.AssetToUpdate.Duration;
-                this.ToggleSwitchEnable.IsOn = this.AssetToUpdate.IsEnabled.Equals("1") ? true : false;
-                this.ToggleSwitchDisableCache.IsOn = this.AssetToUpdate.NoCache.Equals("1") ? true : false;
+                this.ToggleSwitchEnable.IsOn = this.AssetToUpdate.IsEnabled.Equals(1) ? true : false;
+                this.ToggleSwitchDisableCache.IsOn = this.AssetToUpdate.NoCache.Equals(1) ? true : false;
 
                 this.TextBlockTitle.Text = string.Format(this.Loader.GetString("EditAsset"), this.AssetToUpdate.Name, this.DeviceToUpdate.Name);
             }
@@ -95,8 +95,8 @@ namespace ScreenlyManager
                 this.DatePickerEnd.Date = this.AssetToUpdate.EndDate;
                 this.TimePickerEnd.Time = this.AssetToUpdate.EndDate.TimeOfDay;
                 this.TextBoxDuration.Text = this.AssetToUpdate.Duration;
-                this.ToggleSwitchEnable.IsOn = this.AssetToUpdate.IsEnabled.Equals("1") ? true : false;
-                this.ToggleSwitchDisableCache.IsOn = this.AssetToUpdate.NoCache.Equals("1") ? true : false;
+                this.ToggleSwitchEnable.IsOn = this.AssetToUpdate.IsEnabled.Equals(1) ? true : false;
+                this.ToggleSwitchDisableCache.IsOn = this.AssetToUpdate.NoCache.Equals(1) ? true : false;
 
                 this.TextBlockTitle.Text = string.Format(this.Loader.GetString("DuplicateAsset"), this.AssetToUpdate.Name);
             }
