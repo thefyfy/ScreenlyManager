@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ActiveAssets" xml:space="preserve">
+    <value>Actieve assets</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="AddAssetCache.Text" xml:space="preserve">
+    <value>Cache uitschakelen</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetCancel.Content" xml:space="preserve">
+    <value>Annuleren</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetDevice.Text" xml:space="preserve">
+    <value>Apparaten waar asset wordt ingezet</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetDuration.Text" xml:space="preserve">
+    <value>Duur</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetDurationTextBox.PlaceholderText" xml:space="preserve">
+    <value>60 seconden</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetEnable.Text" xml:space="preserve">
+    <value>Asset inschakelen na het toevoegen?</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetEndDate.Text" xml:space="preserve">
+    <value>Einddatum</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetName.Text" xml:space="preserve">
+    <value>Naam</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Vriendelijke naam voor asset</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetStartDate.Text" xml:space="preserve">
+    <value>Startdatum</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetSubmit.Content" xml:space="preserve">
+    <value>Indienen</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetTitle.Text" xml:space="preserve">
+    <value>Nieuwe asset toevoegen</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetToggle.OffContent" xml:space="preserve">
+    <value>Nee</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetToggle.OnContent" xml:space="preserve">
+    <value>Ja</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetType.Text" xml:space="preserve">
+    <value>Asset type</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetUrl.Text" xml:space="preserve">
+    <value>URL</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetUrlTextBox.PlaceholderText" xml:space="preserve">
+    <value>e.g. https://www.screenly.io/</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddDeviceCancel.Content" xml:space="preserve">
+    <value>Annuleren</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceIp.Text" xml:space="preserve">
+    <value>IP-adres</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceIpTextBox.PlaceholderText" xml:space="preserve">
+    <value>Zoals 192.168.1.10</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceLocation.Text" xml:space="preserve">
+    <value>Locatie</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceLocationTextBox.PlaceholderText" xml:space="preserve">
+    <value>De plaats waar hij is</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceName.Text" xml:space="preserve">
+    <value>Naam</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceNameTextBox.PlaceholderText" xml:space="preserve">
+    <value>Vriendelijke naam voor het apparaat</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDevicePort.Text" xml:space="preserve">
+    <value>Poort</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDevicePortTextBox.PlaceholderText" xml:space="preserve">
+    <value>Meestal 80</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceSubmit.Content" xml:space="preserve">
+    <value>Indienen</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceTitle.Text" xml:space="preserve">
+    <value>Nieuw apparaat toevoegen</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="BackupCreated" xml:space="preserve">
+    <value>Backup gemaakt</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="ConfigurationExported" xml:space="preserve">
+    <value>Configuratie geëxporteerd naar  </value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="ConfigurationImported" xml:space="preserve">
+    <value>Configuratie geïmporteerd uit </value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="ConfirmationAddAsset" xml:space="preserve">
+    <value>Je nieuwe display is zojuist ingezet op eerder geselecteerde schermen.</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="ConfirmationAddDevice" xml:space="preserve">
+    <value>Het nieuwe apparaat is toegevoegd</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="ConfirmationEditDevice" xml:space="preserve">
+    <value>Het apparaat is bijgewerkt</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Weet je zeker dat je dit item wilt verwijderen?</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Verwijderen</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="DeviceDown" xml:space="preserve">
+    <value>Oeps..... Dit apparaat is uitgevallen.</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="EditDevice" xml:space="preserve">
+    <value>Apparaat bewerken</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Fout</value>
+    <comment>AddOrChangeDevicePage.xaml/MainPage.xaml</comment>
+  </data>
+  <data name="ErrorCannotSave" xml:space="preserve">
+    <value>Kan configuratie niet opslaan</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="ErrorCannotSaveFile" xml:space="preserve">
+    <value>Oeps..... Het bestand {0} kon niet worden opgeslagen.</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Afbeelding</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="ImportCompleted" xml:space="preserve">
+    <value>Import voltooid</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="InactiveAssets" xml:space="preserve">
+    <value>Inactieve assets</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="InvalidFile" xml:space="preserve">
+    <value>Oeps..... {0} is een ongeldig bestand. We kunnen niet \"Devices\" in dit bestand grijpen. Zie foutmelding hieronder:</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageAssetActive.Text" xml:space="preserve">
+    <value>Actieve assets</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageAssetAdd.Label" xml:space="preserve">
+    <value>Asset toevoegen</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageAssetInactive.Text" xml:space="preserve">
+    <value>Inactieve assets</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageAssetRefresh.Label" xml:space="preserve">
+    <value>Assets vernieuwen</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageAssetTitle.Text" xml:space="preserve">
+    <value>Planning overzicht</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageDeviceAdd.Label" xml:space="preserve">
+    <value>Apparaat toevoegen</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageDeviceRefresh.Label" xml:space="preserve">
+    <value>Apparaat vernieuwen</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageDeviceTitle.Text" xml:space="preserve">
+    <value>Raspberry Lijst</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageExportConf.Label" xml:space="preserve">
+    <value>Configuratie exporteren</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageImportConf.Label" xml:space="preserve">
+    <value>Configuratie importeren</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nee</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="RequiredAssetFileds" xml:space="preserve">
+    <value>Oeps.... Je moet ten minste een apparaat selecteren en de volgende velden invullen: "Naam", "URL", "Startdatum", "Einddatum" en "Duur".</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="RequiredFileds" xml:space="preserve">
+    <value>Oeps..... Je moet ten minste de volgende velden invullen: \"Naam", \"IP-adres" en \"Poort\".</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="ScheduleOverview" xml:space="preserve">
+    <value>Planning overzicht</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>Video</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="Webpage" xml:space="preserve">
+    <value>Webpagina</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="ConfirmationUpdateAsset" xml:space="preserve">
+    <value>Je beeld is net bijgewerkt</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="EditAsset" xml:space="preserve">
+    <value>Asset "{0}" bewerken op "{1}"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutEdit.Text" xml:space="preserve">
+    <value>Bewerken</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutOpen.Text" xml:space="preserve">
+    <value>Open in browser</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="MainPageMenuFlyoutRemove.Text" xml:space="preserve">
+    <value>Verwijderen</value>
+    <comment>MainPage.xaml</comment>
+  </data>
+  <data name="AddDeviceApi.Text" xml:space="preserve">
+    <value>APIversion</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="AddDeviceApiTextBox.PlaceholderText" xml:space="preserve">
+    <value>v1/</value>
+    <comment>AddOrChangeDevicePage.xaml</comment>
+  </data>
+  <data name="DuplicateAsset" xml:space="preserve">
+    <value>Dubbele asset "{0}"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+</root>
