@@ -20,7 +20,7 @@
                 <TextBlock x:Uid="AddDeviceLocation" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <TextBox x:Uid="AddDeviceLocationTextBox" x:Name="TextBoxLocation" Margin="20,2" MaxLength="30" PlaceholderText="" />
                 <TextBlock x:Uid="AddDeviceIp" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
-                <TextBox x:Uid="AddDeviceIpTextBox" x:Name="TextBoxIp" Margin="20,2"  MaxLength="30" PlaceholderText="" />
+                <TextBox x:Uid="AddDeviceIpTextBox" x:Name="TextBoxIp" Margin="20,2"  PlaceholderText="" />
                 <TextBlock x:Uid="AddDevicePort" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2" />
                 <TextBox x:Uid="AddDevicePortTextBox" x:Name="TextBoxPort" Margin="20, 2" MaxLength="5" PlaceholderText="" InputScope="Number" />
                 <TextBlock x:Uid="AddDeviceApi" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2" />
