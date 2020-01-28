@@ -56,19 +56,29 @@ namespace ScreenlyManager
         /// <param name="path">Path to "db.json" file (default storage : appdata/local)</param>
         public async void LoadConfigurationAsync(string path)
         {
-            StorageFile file = await StorageFile.GetFileFromPathAsync(path);
-            string json = await FileIO.ReadTextAsync(file);
-            this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
-            // Need to get list of assets for each device
-            if (this.Devices != null)
+            try
             {
-                foreach (var device in this.Devices)
+                StorageFile file = await StorageFile.GetFileFromPathAsync(path);
+                string json = await FileIO.ReadTextAsync(file);
+                this.Devices = JsonConvert.DeserializeObject<List<Device>>(json);
+                // Need to get list of assets for each device
+                if (this.Devices != null)
                 {
-                    if (await device.IsReachable())
-                        await device.GetAssetsAsync();
+                    foreach (var device in this.Devices)
+                    {
+                        if (await device.IsReachable())
+                            await device.GetAssetsAsync();
+                    }
+                    this.AppBarButtonAddAsset.IsEnabled = true;
+                    this.ListViewDevice.ItemsSource = this.Devices;
                 }
-                this.AppBarButtonAddAsset.IsEnabled = true;
-                this.ListViewDevice.ItemsSource = this.Devices;
+            }
+            catch(Exception ex)
+            {
+                var dialog = new MessageDialog(ex.Message + Environment.NewLine + ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace);
+                dialog.Commands.Add(new UICommand("Ok") { Id = 0 });
+                dialog.DefaultCommandIndex = 0;
+                var result = await dialog.ShowAsync();
             }
             this.ProgressRingLoadingDevice.IsActive = false;
         }

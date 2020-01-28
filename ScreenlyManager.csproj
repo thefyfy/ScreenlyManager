@@ -126,6 +126,7 @@
     </AppxManifest>
     <None Include="README.md" />
     <None Include="ScreenlyManager_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\de-DE\Resources.resw" />
     <PRIResource Include="Strings\nl-NL\Resources.resw" />
   </ItemGroup>
   <ItemGroup>

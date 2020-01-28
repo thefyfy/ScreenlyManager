@@ -119,7 +119,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while getting assets.", ex);
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while getting assets.", ex);
             }
         }
 
@@ -143,7 +143,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error when asset deleting.", ex);
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error when asset deleting.", ex);
             }
 
             return true;
@@ -196,7 +196,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while updating asset.", ex);
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while updating asset.", ex);
             }
 
             return returnedAsset;
@@ -235,7 +235,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while updating assets order.", ex);
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while updating assets order.", ex);
             }
         }
 
@@ -285,7 +285,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while creating asset.", ex);
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while creating asset.", ex);
             }
         }
 
@@ -320,7 +320,7 @@ namespace ScreenlyManager
             }
             catch (Exception ex)
             {
-                throw new Exception("Error while getting assets.", ex);
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while getting assets.", ex);
             }
             return null;
         }
