@@ -72,7 +72,7 @@ namespace ScreenlyManager
             try
             {
                 HttpClient client = new HttpClient();
-                client.Timeout = new TimeSpan(0, 0, 1);
+                client.Timeout = new TimeSpan(0, 0, 3);
 
                 HttpResponseMessage response = await client.GetAsync(this.HttpLink);
                 if (response == null || !response.IsSuccessStatusCode)
