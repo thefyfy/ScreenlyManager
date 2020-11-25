@@ -38,6 +38,9 @@ namespace ScreenlyManager
             }
         }
 
+        [Newtonsoft.Json.JsonIgnore]
+        public string LocalToken { get; set; }
+
         [Newtonsoft.Json.JsonProperty(PropertyName = "nocache")]
         public Int32 NoCache { get; set; }
 

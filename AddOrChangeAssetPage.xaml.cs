@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Windows.Storage.Pickers;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -22,6 +24,8 @@ namespace ScreenlyManager
         public List<Tuple<string, string>> MimeTypes { get; set; }
         private bool IsAnUpdate { get; set; }
 
+        private byte[] UploadedFile { get; set; }
+
         private Windows.ApplicationModel.Resources.ResourceLoader Loader;
 
         public AddOrChangeAssetPage()
@@ -37,9 +41,14 @@ namespace ScreenlyManager
                 new Tuple<string, string>("video", this.Loader.GetString("Video"))
             };
 
+            this.UploadedFile = null;
+
             this.InitializeComponent();
 
-            this.DatePickerEnd.Date = DateTime.Now.AddDays(1);
+            this.DatePickerStart.Date = DateTime.Now;
+            this.TimePickerStart.Time = DatePickerStart.Date.TimeOfDay;
+            this.DatePickerEnd.Date = this.DatePickerStart.Date.AddDays(1);
+            this.TimePickerEnd.Time = this.TimePickerStart.Time;
         }
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
@@ -108,7 +117,10 @@ namespace ScreenlyManager
             {
                 Asset a = this.AssetToUpdate;
                 a.Name = this.TextBoxName.Text;
-                a.Uri = this.TextBoxUrl.Text;
+                if (this.TextBoxUrl.Text.StartsWith("{"))
+                    a.LocalToken = this.TextBoxUrl.Text;
+                else
+                    a.Uri = this.TextBoxUrl.Text;
                 a.StartDate = (this.DatePickerStart.Date.Date + this.TimePickerStart.Time).ToUniversalTime();
                 a.EndDate = (this.DatePickerEnd.Date.Date + this.TimePickerEnd.Time).ToUniversalTime();
                 a.Duration = this.TextBoxDuration.Text;
@@ -131,7 +143,7 @@ namespace ScreenlyManager
                     {
                         var devicesSelected = this.GridViewDevices.SelectedItems.ToList();
                         foreach (var device in devicesSelected)
-                            await (device as Device).CreateAsset(a);
+                            await (device as Device).CreateAssetAsync(a);
                     }
                     else
                     {
@@ -171,6 +183,24 @@ namespace ScreenlyManager
         private void DatePickerStart_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             this.DatePickerEnd.Date = this.DatePickerStart.Date.AddDays(1);
+        }
+
+        private async void ButtonFile_Click(object sender, RoutedEventArgs e)
+        {
+            var picker = new FileOpenPicker();
+            picker.ViewMode = PickerViewMode.Thumbnail;
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".jpg");
+            picker.FileTypeFilter.Add(".jpeg");
+            picker.FileTypeFilter.Add(".png");
+            picker.FileTypeFilter.Add(".mp4");
+            picker.FileTypeFilter.Add(".avi");
+            picker.FileTypeFilter.Add(".mkv");
+
+            Windows.Storage.StorageFile file = await picker.PickSingleFileAsync();
+            if (file != null)
+                // Application now has read/write access to the picked file
+                this.TextBoxUrl.Text = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(file);
         }
     }
 }

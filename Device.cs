@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
 
 namespace ScreenlyManager
 {
@@ -244,8 +246,18 @@ namespace ScreenlyManager
         /// </summary>
         /// <param name="a">New asset to create on Raspberry</param>
         /// <returns></returns>
-        public async Task CreateAsset(Asset a)
+        public async Task CreateAssetAsync(Asset a)
         {
+            if (a.LocalToken != null)
+            {
+                var localFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(a.LocalToken);
+                Stream stream = await localFile.OpenStreamForReadAsync();
+                byte[] result = new byte[(int)stream.Length];
+                await stream.ReadAsync(result, 0, (int)stream.Length);
+                a.Uri = await this.PostFileAssetAsync(result, localFile.Name, localFile.ContentType);
+                a.Name += $" - {localFile.Name}";
+            }
+
             Asset returnedAsset = new Asset();
             JsonSerializerSettings settings = new JsonSerializerSettings();
             IsoDateTimeConverter dateConverter = new IsoDateTimeConverter
@@ -321,6 +333,40 @@ namespace ScreenlyManager
             catch (Exception ex)
             {
                 throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while getting assets.", ex);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Send file to create asset (image or video)
+        /// </summary>
+        /// <param name="itemToSend">Byte array of the file</param>
+        /// <param name="fileName">File's name</param>
+        /// <param name="contentType">File's content type </param>
+        /// <returns></returns>
+        public async Task<string> PostFileAssetAsync(byte[] itemToSend, string fileName, string contentType)
+        {
+            string resultJson = string.Empty;
+            string parameters = $"/api/{this.ApiVersion}file_asset";
+
+            try
+            {
+                HttpClient request = new HttpClient();
+                var content = new MultipartFormDataContent();
+                var itemContent = new ByteArrayContent(itemToSend);
+                itemContent.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                content.Add(itemContent, "file_upload", fileName);
+                using (HttpResponseMessage response = await request.PostAsync(this.HttpLink + parameters, content))
+                {
+                    resultJson = await response.Content.ReadAsStringAsync();
+                }
+
+                if (!resultJson.Equals(string.Empty))
+                    return JsonConvert.DeserializeObject<string>(resultJson);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"[Device = {this.Name}; IP = {this.IpAddress}] Error while sending file.", ex);
             }
             return null;
         }

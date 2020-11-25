@@ -401,4 +401,8 @@
     <value>Asset kopieren "{0}"</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
+  <data name="AddAssetUrlFileButton.Content" xml:space="preserve">
+    <value>Kies een bestand</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
 </root>

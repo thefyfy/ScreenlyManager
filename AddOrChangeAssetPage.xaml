@@ -19,6 +19,7 @@
                 <TextBox x:Uid="AddAssetNameTextBox" x:Name="TextBoxName" Margin="20,2" MaxLength="30" PlaceholderText="" />
                 <TextBlock x:Uid="AddAssetUrl" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <TextBox x:Uid="AddAssetUrlTextBox" x:Name="TextBoxUrl" Margin="20,2" PlaceholderText="" />
+                <Button x:Uid="AddAssetUrlFileButton" Grid.Column="1" x:Name="ButtonFile" Content="" Width="150" HorizontalAlignment="Left" Margin="20, 2" Click="ButtonFile_Click"/>
                 <TextBlock x:Uid="AddAssetType" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>
                 <ComboBox x:Name="ComboBoxAssetType" HorizontalAlignment="Left" Margin="20, 2" HorizontalContentAlignment="Stretch" ItemsSource="{x:Bind MimeTypes}" DisplayMemberPath="Item2" SelectedValuePath="Item1" Loaded="ComboBoxAssetType_Loaded"/>
                 <TextBlock x:Uid="AddAssetStartDate" Text="" HorizontalAlignment="Left" Margin="20, 20, 20, 2"/>

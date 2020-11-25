@@ -186,7 +186,7 @@
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="AddAssetUrlTextBox.PlaceholderText" xml:space="preserve">
-    <value>e.g. https://www.screenly.io/</value>
+    <value>e.g. https://www.screenly.io/ or choose a file below</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
   <data name="AddDeviceCancel.Content" xml:space="preserve">
@@ -399,6 +399,10 @@
   </data>
   <data name="DuplicateAsset" xml:space="preserve">
     <value>Duplicate asset "{0}"</value>
+    <comment>AddOrChangeAssetPage.xaml</comment>
+  </data>
+  <data name="AddAssetUrlFileButton.Content" xml:space="preserve">
+    <value>Choose a file</value>
     <comment>AddOrChangeAssetPage.xaml</comment>
   </data>
 </root>
