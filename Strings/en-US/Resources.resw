@@ -194,11 +194,11 @@
     <comment>AddOrChangeDevicePage.xaml</comment>
   </data>
   <data name="AddDeviceIp.Text" xml:space="preserve">
-    <value>IP Address</value>
+    <value>URL</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
   </data>
   <data name="AddDeviceIpTextBox.PlaceholderText" xml:space="preserve">
-    <value>Like 192.168.1.10</value>
+    <value>Like http://192.168.1.10</value>
     <comment>AddOrChangeDevicePage.xaml</comment>
   </data>
   <data name="AddDeviceLocation.Text" xml:space="preserve">

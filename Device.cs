@@ -5,11 +5,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.Storage;
+using Windows.Security.Cryptography.Certificates;
 using Windows.Storage.AccessCache;
+using Windows.Web.Http;
+using Windows.Web.Http.Filters;
+using Windows.Web.Http.Headers;
 
 namespace ScreenlyManager
 {
@@ -59,24 +62,32 @@ namespace ScreenlyManager
         {
             get
             {
-                return $"http://{IpAddress}:{Port}";
+                return $"{IpAddress}:{Port}";
             }
         }
+
+        [Newtonsoft.Json.JsonIgnore]
+        public HttpBaseProtocolFilter HttpFilter { get; set; }
 
         public Device()
         {
             this.Assets = new List<Asset>();
             this.IsUp = false;
+
+            this.HttpFilter = new HttpBaseProtocolFilter();
+            this.HttpFilter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Expired);
+            this.HttpFilter.IgnorableServerCertificateErrors.Add(ChainValidationResult.Untrusted);
+            this.HttpFilter.IgnorableServerCertificateErrors.Add(ChainValidationResult.InvalidName);
         }
 
         public async Task<bool> IsReachable()
         {
             try
             {
-                HttpClient client = new HttpClient();
-                client.Timeout = new TimeSpan(0, 0, 3);
+                HttpClient client = new HttpClient(this.HttpFilter);
+                var cancellationTokenSource = new CancellationTokenSource(3000);
 
-                HttpResponseMessage response = await client.GetAsync(this.HttpLink);
+                HttpResponseMessage response = await client.GetAsync(new Uri(this.HttpLink)).AsTask(cancellationTokenSource.Token);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     this.IsUp = false;
@@ -111,7 +122,7 @@ namespace ScreenlyManager
             try
             {
                 HttpClient request = new HttpClient();
-                using (HttpResponseMessage response = await request.GetAsync(this.HttpLink + parameters))
+                using (HttpResponseMessage response = await request.GetAsync(new Uri(this.HttpLink + parameters)))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
@@ -138,7 +149,7 @@ namespace ScreenlyManager
             try
             {
                 HttpClient request = new HttpClient();
-                using (HttpResponseMessage response = await request.DeleteAsync(this.HttpLink + parameters))
+                using (HttpResponseMessage response = await request.DeleteAsync(new Uri(this.HttpLink + parameters)))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
@@ -176,9 +187,9 @@ namespace ScreenlyManager
             try
             {
                 HttpClient client = new HttpClient();
-                HttpContent content = new ByteArrayContent(data, 0, data.Length);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                using (HttpResponseMessage response = await client.PutAsync(this.HttpLink + parameters, content))
+                HttpBufferContent content = new HttpBufferContent(data.AsBuffer());
+                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/x-www-form-urlencoded");
+                using (HttpResponseMessage response = await client.PutAsync(new Uri(this.HttpLink + parameters), content))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
@@ -220,9 +231,9 @@ namespace ScreenlyManager
             try
             {
                 HttpClient client = new HttpClient();
-                HttpContent content = new ByteArrayContent(data, 0, data.Length);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-                using (HttpResponseMessage response = await client.PostAsync(this.HttpLink + parameters, content))
+                HttpBufferContent content = new HttpBufferContent(data.AsBuffer());
+                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/x-www-form-urlencoded");
+                using (HttpResponseMessage response = await client.PostAsync(new Uri(this.HttpLink + parameters), content))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
@@ -276,10 +287,9 @@ namespace ScreenlyManager
             try
             {
                 HttpClient client = new HttpClient();
-                HttpContent content = new ByteArrayContent(data, 0, data.Length);
-                content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
-
-                using (HttpResponseMessage response = await client.PostAsync(this.HttpLink + parameters, content))
+                HttpBufferContent content = new HttpBufferContent(data.AsBuffer());
+                content.Headers.ContentType = new HttpMediaTypeHeaderValue("application/x-www-form-urlencoded");
+                using (HttpResponseMessage response = await client.PostAsync(new Uri(this.HttpLink + parameters), content))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
@@ -322,7 +332,7 @@ namespace ScreenlyManager
             try
             {
                 HttpClient request = new HttpClient();
-                using (HttpResponseMessage response = await request.GetAsync(this.HttpLink + parameters))
+                using (HttpResponseMessage response = await request.GetAsync(new Uri(this.HttpLink + parameters)))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
@@ -352,11 +362,11 @@ namespace ScreenlyManager
             try
             {
                 HttpClient request = new HttpClient();
-                var content = new MultipartFormDataContent();
-                var itemContent = new ByteArrayContent(itemToSend);
-                itemContent.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                var content = new HttpMultipartFormDataContent();
+                HttpBufferContent itemContent = new HttpBufferContent(itemToSend.AsBuffer());
+                itemContent.Headers.ContentType = HttpMediaTypeHeaderValue.Parse(contentType);
                 content.Add(itemContent, "file_upload", fileName);
-                using (HttpResponseMessage response = await request.PostAsync(this.HttpLink + parameters, content))
+                using (HttpResponseMessage response = await request.PostAsync(new Uri(this.HttpLink + parameters), content))
                 {
                     resultJson = await response.Content.ReadAsStringAsync();
                 }
