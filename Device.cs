@@ -259,6 +259,8 @@ namespace ScreenlyManager
         /// <returns></returns>
         public async Task CreateAssetAsync(Asset a)
         {
+            var originalName = a.Name;
+
             if (a.LocalToken != null)
             {
                 var localFile = await StorageApplicationPermissions.FutureAccessList.GetFileAsync(a.LocalToken);
@@ -283,6 +285,8 @@ namespace ScreenlyManager
 
             string resultJson = string.Empty;
             string parameters = $"/api/{this.ApiVersion}assets";
+
+            a.Name = originalName;
 
             try
             {
